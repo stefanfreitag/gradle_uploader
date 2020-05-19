@@ -10,3 +10,10 @@ cdk.out
 # Parcel build directories
 .cache
 .build
+
+#Python
+__pycache__/
+venv/
+.idea/
+layer-code/python/
+*.log
