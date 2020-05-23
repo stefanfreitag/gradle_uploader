@@ -16,11 +16,20 @@ import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Duration, CfnOutput, RemovalPolicy } from "@aws-cdk/core";
 import { AnyPrincipal, PolicyStatement, Effect } from "@aws-cdk/aws-iam";
 import { Schedule, Rule } from "@aws-cdk/aws-events";
+import { Topic }  from "@aws-cdk/aws-sns"
+import { EmailSubscription }  from "@aws-cdk/aws-sns-subscriptions"
 import path = require("path");
 
 export class GradleUploaderStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+
+    const topic = new Topic(this, 'Topic', {
+      displayName: 'Gradle uploader topic'
+    });
+    topic.addSubscription(new EmailSubscription('stefan.freitag@udo.edu'));
+
 
     const bucket = this.createBucket();
 
@@ -32,19 +41,23 @@ export class GradleUploaderStack extends cdk.Stack {
     });
 
     const fn = new Function(this, "fnUpload", {
-      runtime: Runtime.PYTHON_3_7,
+      runtime: Runtime.PYTHON_3_8,
       description: "Download Gradle distribution to S3 bucket",
       handler: "gradleUploader.main",
       code: Code.fromAsset("./lambda/"),
       timeout: Duration.minutes(5),
+      memorySize: 512,
       layers: [layer],
       environment: {
         BUCKET_NAME: bucket.bucketName,
+        TOPIC_ARN: topic.topicArn
       },
     });
     bucket.grantReadWrite(fn);
 
+    topic.grantPublish(fn);
     const target = new LambdaFunction(fn);
+
     new Rule(this, "ScheduleRule", {
       schedule: Schedule.cron({ minute: "0", hour: "0", day: "1", month: "*" }),
       targets: [target],
@@ -54,6 +67,8 @@ export class GradleUploaderStack extends cdk.Stack {
       value: bucket.bucketArn,
       description: "Bucket ARN",
     });
+
+
   }
 
   createBucket(): Bucket {
@@ -95,4 +110,7 @@ export class GradleUploaderStack extends cdk.Stack {
     );
     return bucket;
   }
+
+
+
 }
