@@ -16,20 +16,18 @@ import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Duration, CfnOutput, RemovalPolicy } from "@aws-cdk/core";
 import { AnyPrincipal, PolicyStatement, Effect } from "@aws-cdk/aws-iam";
 import { Schedule, Rule } from "@aws-cdk/aws-events";
-import { Topic }  from "@aws-cdk/aws-sns"
-import { EmailSubscription }  from "@aws-cdk/aws-sns-subscriptions"
+import { Topic } from "@aws-cdk/aws-sns";
+import { EmailSubscription } from "@aws-cdk/aws-sns-subscriptions";
 import path = require("path");
 
 export class GradleUploaderStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-
-    const topic = new Topic(this, 'Topic', {
-      displayName: 'Gradle uploader topic'
+    const topic = new Topic(this, "Topic", {
+      displayName: "Gradle uploader topic",
     });
-    topic.addSubscription(new EmailSubscription('stefan.freitag@udo.edu'));
-
+    topic.addSubscription(new EmailSubscription("stefan.freitag@udo.edu"));
 
     const bucket = this.createBucket();
 
@@ -50,7 +48,7 @@ export class GradleUploaderStack extends cdk.Stack {
       layers: [layer],
       environment: {
         BUCKET_NAME: bucket.bucketName,
-        TOPIC_ARN: topic.topicArn
+        TOPIC_ARN: topic.topicArn,
       },
     });
     bucket.grantReadWrite(fn);
@@ -67,8 +65,6 @@ export class GradleUploaderStack extends cdk.Stack {
       value: bucket.bucketArn,
       description: "Bucket ARN",
     });
-
-
   }
 
   createBucket(): Bucket {
@@ -110,7 +106,4 @@ export class GradleUploaderStack extends cdk.Stack {
     );
     return bucket;
   }
-
-
-
 }

@@ -104,8 +104,8 @@ def main(event, context):
             sns = boto3.client("sns")
             response = sns.publish(
             TopicArn=TOPIC_ARN,
-            Message="Fyi",
-            Subject="New Gradle version available: " + str(metaInfo.version))
+            Message="New Gradle version available: " + str(metaInfo.version)),
+            Subject="Gradle Uploader Lambda"
             print("Sent mail")
     except KeyError as identifier:
         print("S3 Bucket name not specified " + identifier)
