@@ -1,5 +1,16 @@
 {
   "extends": [
     "config:base"
+  ],
+  "enabledManagers": ["npm"],
+  "packageRules": [
+    {
+      "packageNames": ["aws-cdk"],
+      "packagePatterns": ["^@aws-cdk/"],
+      "schedule": ["after 9pm on sunday"]
+    },
+    {
+      "excludePackageNames": ["@types/node"]
+    }
   ]
 }
