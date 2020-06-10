@@ -10,7 +10,8 @@
       "schedule": ["after 9pm on sunday"]
     },
     {
-      "excludePackageNames": ["@types/node"]
-    }
+      "packageNames": ["@types/node", "@types/jest"],
+      "enabled": false
+    }    
   ]
 }
