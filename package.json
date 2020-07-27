@@ -4,6 +4,19 @@
   "bin": {
     "gradle_uploader": "bin/gradle_uploader.js"
   },
+  "author": {
+    "name": "Stefan Freitag",
+    "email": "stefan@stefreitag.de"
+  },
+  "repository": {
+    "url": "git://github.com/stefanfreitag/gradle_uploader.git",
+    "type": "git"
+  },
+  "keywords": [
+    "aws",
+    "cdk"
+  ],
+  "license": "Apache-2.0",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
