@@ -1,5 +1,5 @@
 {
-  "name": "gradle_uploader",
+  "name": "@stefanfreitag/cdk-gradle-uploader",
   "version": "0.1.2",
   "bin": {
     "gradle_uploader": "bin/gradle_uploader.js"
