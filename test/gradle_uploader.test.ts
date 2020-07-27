@@ -62,7 +62,7 @@ test("SNS topic is setup ", () => {
     whitelist: ["87.122.220.125/32", "87.122.210.146/32"],
   });
 
-  expectCDK(stack).to(haveResource("AWS::SNS::Topic", {}));
+  expectCDK(stack).to(haveResource("AWS::SNS::Topic"));
 });
 
 test("SNS subscription is setup ", () => {
