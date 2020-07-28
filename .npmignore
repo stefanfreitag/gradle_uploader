@@ -6,6 +6,7 @@
 .release-it.json
 .whitesource
 renovate.json
+circleci/
 
 # CDK asset staging directory
 .cdk.staging
