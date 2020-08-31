@@ -1,5 +1,5 @@
 pull_request_rules:
-    - name: Automatic merge on approval
+    - name: Automatic merge on update by renovate
       actions:
         merge:
           strict: smart
@@ -11,7 +11,8 @@ pull_request_rules:
         delete_head_branch: {}
         dismiss_reviews: {}
       conditions:
-      - author!=renovate[bot]
+      - author=renovate[bot]
       - status-success=Semantic Pull Request
       - status-success=Codacy/PR Quality Review
+      - "status-success=ci/circleci: build-and-test
       - -closed
