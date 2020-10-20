@@ -76,7 +76,9 @@
   },
   "bundledDependencies": [],
   "keywords": [
-    "cdk"
+    "cdk",
+    "gradle",
+    "s3"
   ],
   "engines": {
     "node": ">= 10.17.0"
