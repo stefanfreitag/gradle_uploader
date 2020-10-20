@@ -4,9 +4,8 @@ import { AnyPrincipal, PolicyStatement, Effect } from '@aws-cdk/aws-iam';
 import {
   Function,
   Runtime,
-  LayerVersion,
 } from '@aws-cdk/aws-lambda';
-import { PythonFunction, PythonLayerVersion } from '@aws-cdk/aws-lambda-python';
+import { PythonFunction } from '@aws-cdk/aws-lambda-python';
 import {
   Bucket,
   BlockPublicAccess,
@@ -32,8 +31,8 @@ export class GradleUploader extends Construct {
 
     const topic = this.createTopic(uploaderProperties);
     const bucket = this.createBucket(uploaderProperties.whitelist);
-    const layer = this.createLambdaLayer();
-    const fn = this.createFunction(layer, bucket, topic);
+
+    const fn = this.createFunction(bucket, topic);
     bucket.grantReadWrite(fn);
     topic.grantPublish(fn);
 
@@ -57,31 +56,31 @@ export class GradleUploader extends Construct {
     });
   }
 
-  private createFunction(layer: LayerVersion, bucket: Bucket, topic: Topic) {
+  private createFunction(bucket: Bucket, topic: Topic) {
     return new PythonFunction(this, 'fnUpload', {
       runtime: Runtime.PYTHON_3_8,
       description: 'Download Gradle distribution to S3 bucket',
       index: 'gradleUploader.py',
-      handler: 'gradleUploader.main',
-      entry: './lambda/',
+      handler: 'main',
+      entry: './lambda',
       timeout: Duration.minutes(5),
       memorySize: 512,
-      layers: [layer],
       environment: {
         BUCKET_NAME: bucket.bucketName,
         TOPIC_ARN: topic.topicArn,
       },
     });
   }
-
-  private createLambdaLayer() {
+  /**
+  private createLambdaLayer(): PythonLayerVersion{
     return new PythonLayerVersion(this, 'GradleUploaderLayer', {
-      entry: './lambda',
+      entry: './lambda/',
       compatibleRuntimes: [Runtime.PYTHON_3_8],
       license: 'Apache-2.0',
       description: 'A layer containing dependencies for thr Gradle Uploader',
     });
   }
+   */
 
   private createTopic(uploaderProperties: GradleUploaderProps) {
     const topic = new Topic(this, 'NotificationTopic', {});
