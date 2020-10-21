@@ -1,0 +1,387 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`S3 bucket is encrypted and not public accessible  1`] = `
+Object {
+  "Outputs": Object {
+    "MyConstructbucketArnOutputE285C4B4": Object {
+      "Description": "Bucket ARN",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "MyConstructbucketC206B943",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1ArtifactHash7CDAA6BD": Object {
+      "Description": "Artifact hash for asset \\"83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1\\"",
+      "Type": "String",
+    },
+    "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3Bucket464C43AE": Object {
+      "Description": "S3 bucket for asset \\"83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1\\"",
+      "Type": "String",
+    },
+    "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3VersionKey0500280C": Object {
+      "Description": "S3 key for asset version \\"83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1\\"",
+      "Type": "String",
+    },
+    "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3ArtifactHash6AACD5A7": Object {
+      "Description": "Artifact hash for asset \\"96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3\\"",
+      "Type": "String",
+    },
+    "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3BucketB3CA7B5C": Object {
+      "Description": "S3 bucket for asset \\"96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3\\"",
+      "Type": "String",
+    },
+    "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3VersionKeyDDA46F46": Object {
+      "Description": "S3 key for asset version \\"96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "MyConstructGradleUploaderLayerA35DA212": Object {
+      "Properties": Object {
+        "CompatibleRuntimes": Array [
+          "python3.8",
+        ],
+        "Content": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3Bucket464C43AE",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3VersionKey0500280C",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3VersionKey0500280C",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Description": "A layer containing dependencies for thr Gradle Uploader",
+        "LicenseInfo": "Apache-2.0",
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+    "MyConstructNotificationTopic44794FFD": Object {
+      "Type": "AWS::SNS::Topic",
+    },
+    "MyConstructNotificationTopicjohndoefoobarcomA5E4354F": Object {
+      "Properties": Object {
+        "Endpoint": "john.doe@foobar.com",
+        "Protocol": "email",
+        "TopicArn": Object {
+          "Ref": "MyConstructNotificationTopic44794FFD",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "MyConstructScheduleRule997972F2": Object {
+      "Properties": Object {
+        "ScheduleExpression": "cron(0 0 * * ? *)",
+        "State": "ENABLED",
+        "Targets": Array [
+          Object {
+            "Arn": Object {
+              "Fn::GetAtt": Array [
+                "MyConstructfnUpload8552058A",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "MyConstructbucketC206B943": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "MyConstructbucketPolicy2322E323": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "MyConstructbucketC206B943",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Condition": Object {
+                "IpAddress": Object {
+                  "aws:SourceIp": Array [
+                    "87.122.220.125/32",
+                    "87.122.210.146/32",
+                  ],
+                },
+              },
+              "Effect": "Allow",
+              "Principal": "*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "MyConstructbucketC206B943",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "s3:ListBucket",
+                "s3:GetBucketLocation",
+              ],
+              "Condition": Object {
+                "IpAddress": Object {
+                  "aws:SourceIp": Array [
+                    "87.122.220.125/32",
+                    "87.122.210.146/32",
+                  ],
+                },
+              },
+              "Effect": "Allow",
+              "Principal": "*",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "MyConstructbucketC206B943",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "MyConstructfnUpload8552058A": Object {
+      "DependsOn": Array [
+        "MyConstructfnUploadServiceRoleDefaultPolicy297AEF6E",
+        "MyConstructfnUploadServiceRole51911E02",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3BucketB3CA7B5C",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3VersionKeyDDA46F46",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3VersionKeyDDA46F46",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Description": "Download Gradle distribution to S3 bucket",
+        "Environment": Object {
+          "Variables": Object {
+            "BUCKET_NAME": Object {
+              "Ref": "MyConstructbucketC206B943",
+            },
+            "TOPIC_ARN": Object {
+              "Ref": "MyConstructNotificationTopic44794FFD",
+            },
+          },
+        },
+        "Handler": "gradleUploader.main",
+        "Layers": Array [
+          Object {
+            "Ref": "MyConstructGradleUploaderLayerA35DA212",
+          },
+        ],
+        "MemorySize": 512,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "MyConstructfnUploadServiceRole51911E02",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "MyConstructfnUploadAllowEventRuleMyConstructScheduleRuleDDCD4BF45A2FD086": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "MyConstructfnUpload8552058A",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::GetAtt": Array [
+            "MyConstructScheduleRule997972F2",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "MyConstructfnUploadServiceRole51911E02": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "MyConstructfnUploadServiceRoleDefaultPolicy297AEF6E": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "MyConstructbucketC206B943",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "MyConstructbucketC206B943",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "MyConstructNotificationTopic44794FFD",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "MyConstructfnUploadServiceRoleDefaultPolicy297AEF6E",
+        "Roles": Array [
+          Object {
+            "Ref": "MyConstructfnUploadServiceRole51911E02",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
