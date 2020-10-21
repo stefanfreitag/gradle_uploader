@@ -4,11 +4,16 @@ const project = new AwsCdkConstructLibrary({
   authorAddress: "stefan.freitag@udo.edu",
   authorName: "Stefan Freitag",
   name: "Gradle_S3_Uploader",
+  description:"Uploads new Gradle versions to an S3 bucket",
   repository: "https://github.com/stefan.freitag/projen_gradle_uploader.git",
   cdkVersion: "1.68.0",
   keywords: [
     "cdk", "gradle", "s3"
   ],
+  catalog:{
+    announce: false
+  },
+  dependabot: false,
   cdkDependencies: [
     "@aws-cdk/aws-events",
     "@aws-cdk/aws-events-targets",
