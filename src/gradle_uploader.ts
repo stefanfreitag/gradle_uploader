@@ -73,8 +73,8 @@ export class GradleUploader extends Construct {
       },
     });
   }
-  
-  private createLambdaLayer(): PythonLayerVersion{
+
+  private createLambdaLayer(): PythonLayerVersion {
     return new PythonLayerVersion(this, 'GradleUploaderLayer', {
       entry: './lambda/',
       compatibleRuntimes: [Runtime.PYTHON_3_8],
