@@ -1,0 +1,62 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const assert_1 = require("@aws-cdk/assert");
+const core_1 = require("@aws-cdk/core");
+const gradle_uploader_1 = require("../src/gradle_uploader");
+test('S3 bucket is encrypted and not public accessible ', () => {
+    // Given
+    const stack = new core_1.Stack();
+    new gradle_uploader_1.GradleUploader(stack, 'MyConstruct', {
+        mailProperties: { subscribers: ['john.doe@foobar.com'] },
+        whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
+    });
+    expect(assert_1.SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    // Then
+    assert_1.expect(stack).to(assert_1.haveResource('AWS::S3::Bucket', {
+        PublicAccessBlockConfiguration: {
+            BlockPublicAcls: true,
+            BlockPublicPolicy: true,
+            IgnorePublicAcls: true,
+            RestrictPublicBuckets: true,
+        },
+        BucketEncryption: {
+            ServerSideEncryptionConfiguration: [
+                {
+                    ServerSideEncryptionByDefault: {
+                        SSEAlgorithm: 'AES256',
+                    },
+                },
+            ],
+        },
+    }));
+});
+test('SNS topic is setup ', () => {
+    const stack = new core_1.Stack();
+    new gradle_uploader_1.GradleUploader(stack, 'MyConstruct', {
+        mailProperties: { subscribers: ['john.doe@foobar.com'] },
+        whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
+    });
+    assert_1.expect(stack).to(assert_1.haveResource('AWS::SNS::Topic'));
+});
+test('SNS subscription is setup ', () => {
+    const stack = new core_1.Stack();
+    new gradle_uploader_1.GradleUploader(stack, 'MyTestStack', {
+        mailProperties: { subscribers: ['john.doe@foobar.com'] },
+        whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
+    });
+    assert_1.expect(stack).to(assert_1.haveResource('AWS::SNS::Subscription', {
+        Protocol: 'email',
+        Endpoint: 'john.doe@foobar.com',
+    }));
+});
+test('Lambda function is setup ', () => {
+    const stack = new core_1.Stack();
+    new gradle_uploader_1.GradleUploader(stack, 'MyTestStack', {
+        mailProperties: { subscribers: ['john.doe@foobar.com'] },
+        whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
+    });
+    assert_1.expect(stack).to(assert_1.haveResource('AWS::Lambda::Function', {
+        Runtime: 'python3.8',
+    }));
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ3JhZGxlX3VwbG9hZGVyLnRlc3QuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJncmFkbGVfdXBsb2FkZXIudGVzdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDRDQUFnRjtBQUNoRix3Q0FBc0M7QUFDdEMsNERBQXdEO0FBRXhELElBQUksQ0FBQyxtREFBbUQsRUFBRSxHQUFHLEVBQUU7SUFDN0QsUUFBUTtJQUNSLE1BQU0sS0FBSyxHQUFHLElBQUksWUFBSyxFQUFFLENBQUM7SUFDMUIsSUFBSSxnQ0FBYyxDQUFDLEtBQUssRUFBRSxhQUFhLEVBQUU7UUFDdkMsY0FBYyxFQUFFLEVBQUUsV0FBVyxFQUFFLENBQUMscUJBQXFCLENBQUMsRUFBRTtRQUN4RCxTQUFTLEVBQUUsQ0FBQyxtQkFBbUIsRUFBRSxtQkFBbUIsQ0FBQztLQUN0RCxDQUFDLENBQUM7SUFFSCxNQUFNLENBQUMsbUJBQVUsQ0FBQyxnQkFBZ0IsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDLGVBQWUsRUFBRSxDQUFDO0lBRTdELE9BQU87SUFDUCxlQUFTLENBQUMsS0FBSyxDQUFDLENBQUMsRUFBRSxDQUNqQixxQkFBWSxDQUFDLGlCQUFpQixFQUFFO1FBQzlCLDhCQUE4QixFQUFFO1lBQzlCLGVBQWUsRUFBRSxJQUFJO1lBQ3JCLGlCQUFpQixFQUFFLElBQUk7WUFDdkIsZ0JBQWdCLEVBQUUsSUFBSTtZQUN0QixxQkFBcUIsRUFBRSxJQUFJO1NBQzVCO1FBQ0QsZ0JBQWdCLEVBQUU7WUFDaEIsaUNBQWlDLEVBQUU7Z0JBQ2pDO29CQUNFLDZCQUE2QixFQUFFO3dCQUM3QixZQUFZLEVBQUUsUUFBUTtxQkFDdkI7aUJBQ0Y7YUFDRjtTQUNGO0tBQ0YsQ0FBQyxDQUNILENBQUM7QUFDSixDQUFDLENBQUMsQ0FBQztBQUVILElBQUksQ0FBQyxxQkFBcUIsRUFBRSxHQUFHLEVBQUU7SUFDL0IsTUFBTSxLQUFLLEdBQUcsSUFBSSxZQUFLLEVBQUUsQ0FBQztJQUUxQixJQUFJLGdDQUFjLENBQUMsS0FBSyxFQUFFLGFBQWEsRUFBRTtRQUN2QyxjQUFjLEVBQUUsRUFBRSxXQUFXLEVBQUUsQ0FBQyxxQkFBcUIsQ0FBQyxFQUFFO1FBQ3hELFNBQVMsRUFBRSxDQUFDLG1CQUFtQixFQUFFLG1CQUFtQixDQUFDO0tBQ3RELENBQUMsQ0FBQztJQUVILGVBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxFQUFFLENBQUMscUJBQVksQ0FBQyxpQkFBaUIsQ0FBQyxDQUFDLENBQUM7QUFDdkQsQ0FBQyxDQUFDLENBQUM7QUFFSCxJQUFJLENBQUMsNEJBQTRCLEVBQUUsR0FBRyxFQUFFO0lBQ3RDLE1BQU0sS0FBSyxHQUFHLElBQUksWUFBSyxFQUFFLENBQUM7SUFFMUIsSUFBSSxnQ0FBYyxDQUFDLEtBQUssRUFBRSxhQUFhLEVBQUU7UUFDdkMsY0FBYyxFQUFFLEVBQUUsV0FBVyxFQUFFLENBQUMscUJBQXFCLENBQUMsRUFBRTtRQUN4RCxTQUFTLEVBQUUsQ0FBQyxtQkFBbUIsRUFBRSxtQkFBbUIsQ0FBQztLQUN0RCxDQUFDLENBQUM7SUFFSCxlQUFTLENBQUMsS0FBSyxDQUFDLENBQUMsRUFBRSxDQUNqQixxQkFBWSxDQUFDLHdCQUF3QixFQUFFO1FBQ3JDLFFBQVEsRUFBRSxPQUFPO1FBQ2pCLFFBQVEsRUFBRSxxQkFBcUI7S0FDaEMsQ0FBQyxDQUNILENBQUM7QUFDSixDQUFDLENBQUMsQ0FBQztBQUVILElBQUksQ0FBQywyQkFBMkIsRUFBRSxHQUFHLEVBQUU7SUFDckMsTUFBTSxLQUFLLEdBQUcsSUFBSSxZQUFLLEVBQUUsQ0FBQztJQUUxQixJQUFJLGdDQUFjLENBQUMsS0FBSyxFQUFFLGFBQWEsRUFBRTtRQUN2QyxjQUFjLEVBQUUsRUFBRSxXQUFXLEVBQUUsQ0FBQyxxQkFBcUIsQ0FBQyxFQUFFO1FBQ3hELFNBQVMsRUFBRSxDQUFDLG1CQUFtQixFQUFFLG1CQUFtQixDQUFDO0tBQ3RELENBQUMsQ0FBQztJQUVILGVBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxFQUFFLENBQ2pCLHFCQUFZLENBQUMsdUJBQXVCLEVBQUU7UUFDcEMsT0FBTyxFQUFFLFdBQVc7S0FDckIsQ0FBQyxDQUNILENBQUM7QUFDSixDQUFDLENBQUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGV4cGVjdCBhcyBleHBlY3RDREssIGhhdmVSZXNvdXJjZSwgU3ludGhVdGlscyB9IGZyb20gJ0Bhd3MtY2RrL2Fzc2VydCc7XG5pbXBvcnQgeyBTdGFjayB9IGZyb20gJ0Bhd3MtY2RrL2NvcmUnO1xuaW1wb3J0IHsgR3JhZGxlVXBsb2FkZXIgfSBmcm9tICcuLi9zcmMvZ3JhZGxlX3VwbG9hZGVyJztcblxudGVzdCgnUzMgYnVja2V0IGlzIGVuY3J5cHRlZCBhbmQgbm90IHB1YmxpYyBhY2Nlc3NpYmxlICcsICgpID0+IHtcbiAgLy8gR2l2ZW5cbiAgY29uc3Qgc3RhY2sgPSBuZXcgU3RhY2soKTtcbiAgbmV3IEdyYWRsZVVwbG9hZGVyKHN0YWNrLCAnTXlDb25zdHJ1Y3QnLCB7XG4gICAgbWFpbFByb3BlcnRpZXM6IHsgc3Vic2NyaWJlcnM6IFsnam9obi5kb2VAZm9vYmFyLmNvbSddIH0sXG4gICAgd2hpdGVsaXN0OiBbJzg3LjEyMi4yMjAuMTI1LzMyJywgJzg3LjEyMi4yMTAuMTQ2LzMyJ10sXG4gIH0pO1xuXG4gIGV4cGVjdChTeW50aFV0aWxzLnRvQ2xvdWRGb3JtYXRpb24oc3RhY2spKS50b01hdGNoU25hcHNob3QoKTtcblxuICAvLyBUaGVuXG4gIGV4cGVjdENESyhzdGFjaykudG8oXG4gICAgaGF2ZVJlc291cmNlKCdBV1M6OlMzOjpCdWNrZXQnLCB7XG4gICAgICBQdWJsaWNBY2Nlc3NCbG9ja0NvbmZpZ3VyYXRpb246IHtcbiAgICAgICAgQmxvY2tQdWJsaWNBY2xzOiB0cnVlLFxuICAgICAgICBCbG9ja1B1YmxpY1BvbGljeTogdHJ1ZSxcbiAgICAgICAgSWdub3JlUHVibGljQWNsczogdHJ1ZSxcbiAgICAgICAgUmVzdHJpY3RQdWJsaWNCdWNrZXRzOiB0cnVlLFxuICAgICAgfSxcbiAgICAgIEJ1Y2tldEVuY3J5cHRpb246IHtcbiAgICAgICAgU2VydmVyU2lkZUVuY3J5cHRpb25Db25maWd1cmF0aW9uOiBbXG4gICAgICAgICAge1xuICAgICAgICAgICAgU2VydmVyU2lkZUVuY3J5cHRpb25CeURlZmF1bHQ6IHtcbiAgICAgICAgICAgICAgU1NFQWxnb3JpdGhtOiAnQUVTMjU2JyxcbiAgICAgICAgICAgIH0sXG4gICAgICAgICAgfSxcbiAgICAgICAgXSxcbiAgICAgIH0sXG4gICAgfSksXG4gICk7XG59KTtcblxudGVzdCgnU05TIHRvcGljIGlzIHNldHVwICcsICgpID0+IHtcbiAgY29uc3Qgc3RhY2sgPSBuZXcgU3RhY2soKTtcblxuICBuZXcgR3JhZGxlVXBsb2FkZXIoc3RhY2ssICdNeUNvbnN0cnVjdCcsIHtcbiAgICBtYWlsUHJvcGVydGllczogeyBzdWJzY3JpYmVyczogWydqb2huLmRvZUBmb29iYXIuY29tJ10gfSxcbiAgICB3aGl0ZWxpc3Q6IFsnODcuMTIyLjIyMC4xMjUvMzInLCAnODcuMTIyLjIxMC4xNDYvMzInXSxcbiAgfSk7XG5cbiAgZXhwZWN0Q0RLKHN0YWNrKS50byhoYXZlUmVzb3VyY2UoJ0FXUzo6U05TOjpUb3BpYycpKTtcbn0pO1xuXG50ZXN0KCdTTlMgc3Vic2NyaXB0aW9uIGlzIHNldHVwICcsICgpID0+IHtcbiAgY29uc3Qgc3RhY2sgPSBuZXcgU3RhY2soKTtcblxuICBuZXcgR3JhZGxlVXBsb2FkZXIoc3RhY2ssICdNeVRlc3RTdGFjaycsIHtcbiAgICBtYWlsUHJvcGVydGllczogeyBzdWJzY3JpYmVyczogWydqb2huLmRvZUBmb29iYXIuY29tJ10gfSxcbiAgICB3aGl0ZWxpc3Q6IFsnODcuMTIyLjIyMC4xMjUvMzInLCAnODcuMTIyLjIxMC4xNDYvMzInXSxcbiAgfSk7XG5cbiAgZXhwZWN0Q0RLKHN0YWNrKS50byhcbiAgICBoYXZlUmVzb3VyY2UoJ0FXUzo6U05TOjpTdWJzY3JpcHRpb24nLCB7XG4gICAgICBQcm90b2NvbDogJ2VtYWlsJyxcbiAgICAgIEVuZHBvaW50OiAnam9obi5kb2VAZm9vYmFyLmNvbScsXG4gICAgfSksXG4gICk7XG59KTtcblxudGVzdCgnTGFtYmRhIGZ1bmN0aW9uIGlzIHNldHVwICcsICgpID0+IHtcbiAgY29uc3Qgc3RhY2sgPSBuZXcgU3RhY2soKTtcblxuICBuZXcgR3JhZGxlVXBsb2FkZXIoc3RhY2ssICdNeVRlc3RTdGFjaycsIHtcbiAgICBtYWlsUHJvcGVydGllczogeyBzdWJzY3JpYmVyczogWydqb2huLmRvZUBmb29iYXIuY29tJ10gfSxcbiAgICB3aGl0ZWxpc3Q6IFsnODcuMTIyLjIyMC4xMjUvMzInLCAnODcuMTIyLjIxMC4xNDYvMzInXSxcbiAgfSk7XG5cbiAgZXhwZWN0Q0RLKHN0YWNrKS50byhcbiAgICBoYXZlUmVzb3VyY2UoJ0FXUzo6TGFtYmRhOjpGdW5jdGlvbicsIHtcbiAgICAgIFJ1bnRpbWU6ICdweXRob24zLjgnLFxuICAgIH0pLFxuICApO1xufSk7XG4iXX0=

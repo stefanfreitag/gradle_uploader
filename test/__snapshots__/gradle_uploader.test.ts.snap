@@ -14,28 +14,28 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1ArtifactHash7CDAA6BD": Object {
-      "Description": "Artifact hash for asset \\"83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1\\"",
+    "AssetParameters11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9bArtifactHashDC377076": Object {
+      "Description": "Artifact hash for asset \\"11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9b\\"",
       "Type": "String",
     },
-    "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3Bucket464C43AE": Object {
-      "Description": "S3 bucket for asset \\"83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1\\"",
+    "AssetParameters11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9bS3Bucket43C371B2": Object {
+      "Description": "S3 bucket for asset \\"11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9b\\"",
       "Type": "String",
     },
-    "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3VersionKey0500280C": Object {
-      "Description": "S3 key for asset version \\"83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1\\"",
+    "AssetParameters11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9bS3VersionKey55D761B1": Object {
+      "Description": "S3 key for asset version \\"11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9b\\"",
       "Type": "String",
     },
-    "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3ArtifactHash6AACD5A7": Object {
-      "Description": "Artifact hash for asset \\"96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3\\"",
+    "AssetParameters5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695ArtifactHash6DE6E256": Object {
+      "Description": "Artifact hash for asset \\"5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695\\"",
       "Type": "String",
     },
-    "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3BucketB3CA7B5C": Object {
-      "Description": "S3 bucket for asset \\"96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3\\"",
+    "AssetParameters5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695S3BucketE0CF5D61": Object {
+      "Description": "S3 bucket for asset \\"5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695\\"",
       "Type": "String",
     },
-    "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3VersionKeyDDA46F46": Object {
-      "Description": "S3 key for asset version \\"96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3\\"",
+    "AssetParameters5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695S3VersionKeyE0C4F5AB": Object {
+      "Description": "S3 key for asset version \\"5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695\\"",
       "Type": "String",
     },
   },
@@ -47,7 +47,7 @@ Object {
         ],
         "Content": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3Bucket464C43AE",
+            "Ref": "AssetParameters11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9bS3Bucket43C371B2",
           },
           "S3Key": Object {
             "Fn::Join": Array [
@@ -60,7 +60,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3VersionKey0500280C",
+                          "Ref": "AssetParameters11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9bS3VersionKey55D761B1",
                         },
                       ],
                     },
@@ -73,7 +73,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters83d0124d35b7526488d7eeed009cdc60186be3dee347ea274206a0f366ee57a1S3VersionKey0500280C",
+                          "Ref": "AssetParameters11c4eec74896c90904d190133557f52a66280619d8a57784da665b2833067b9bS3VersionKey55D761B1",
                         },
                       ],
                     },
@@ -83,7 +83,7 @@ Object {
             ],
           },
         },
-        "Description": "A layer containing dependencies for thr Gradle Uploader",
+        "Description": "A layer containing dependencies for the Gradle Uploader",
         "LicenseInfo": "Apache-2.0",
       },
       "Type": "AWS::Lambda::LayerVersion",
@@ -118,6 +118,25 @@ Object {
         ],
       },
       "Type": "AWS::Events::Rule",
+    },
+    "MyConstructScheduleRuleAllowEventRuleMyConstructScheduleRuleDDCD4BF4790CB693": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "MyConstructfnUpload8552058A",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::GetAtt": Array [
+            "MyConstructScheduleRule997972F2",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "MyConstructbucketC206B943": Object {
       "DeletionPolicy": "Delete",
@@ -211,7 +230,7 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3BucketB3CA7B5C",
+            "Ref": "AssetParameters5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695S3BucketE0CF5D61",
           },
           "S3Key": Object {
             "Fn::Join": Array [
@@ -224,7 +243,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3VersionKeyDDA46F46",
+                          "Ref": "AssetParameters5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695S3VersionKeyE0C4F5AB",
                         },
                       ],
                     },
@@ -237,7 +256,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters96a32d752364a0de0164c0478057837b6538e18bb97c2fd4c7a370f1312170a3S3VersionKeyDDA46F46",
+                          "Ref": "AssetParameters5c4520676aaa09cffe419d517db584484ad1030f3e84dccde921128581fa9695S3VersionKeyE0C4F5AB",
                         },
                       ],
                     },
@@ -258,7 +277,7 @@ Object {
             },
           },
         },
-        "Handler": "gradleUploader.main",
+        "Handler": "gradle_uploader.main",
         "Layers": Array [
           Object {
             "Ref": "MyConstructGradleUploaderLayerA35DA212",
@@ -275,25 +294,6 @@ Object {
         "Timeout": 300,
       },
       "Type": "AWS::Lambda::Function",
-    },
-    "MyConstructfnUploadAllowEventRuleMyConstructScheduleRuleDDCD4BF45A2FD086": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "MyConstructfnUpload8552058A",
-            "Arn",
-          ],
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
-            "MyConstructScheduleRule997972F2",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
     },
     "MyConstructfnUploadServiceRole51911E02": Object {
       "Properties": Object {
