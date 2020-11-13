@@ -57,7 +57,7 @@ class TestStringMethods(unittest.TestCase):
         message = create_slack_message(meta_info)
         send_slack_message(
             message,
-            "https://hooks.slack.com/services/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",
+            "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX",
         )
 
     def test_get_meta_info(self):
