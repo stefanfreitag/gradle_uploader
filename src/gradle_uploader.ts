@@ -17,8 +17,33 @@ import { Topic } from '@aws-cdk/aws-sns';
 import { EmailSubscription } from '@aws-cdk/aws-sns-subscriptions';
 import { Duration, CfnOutput, RemovalPolicy, Construct } from '@aws-cdk/core';
 
-export interface GradleUploaderProps {
+/**
+ * Properties related to forwarding messages to Slack.
+ */
+export interface SlackProperties{
+  /** The Slack webhook used to send messages. Details on setting up a webhook can be found at https://api.slack.com/messaging/webhooks.
+   *  @experimental
+  */
+  readonly webhook: string;
+}
+
+/**
+ * Properties related to forwarding messages via mail.
+ */
+export interface MailProperties {
+
   readonly subscribers: Array<string>;
+}
+
+export interface UploaderProperties {
+  /**
+   * Optional properties required for sending messages via Slack.
+   */
+  readonly slackProperties?: SlackProperties;
+  /**
+   * Optional properties required for sending messages via mail.
+   */
+  readonly mailProperties?: MailProperties;
   readonly whitelist: Array<string>;
   readonly schedule?: Schedule;
 }
@@ -27,13 +52,21 @@ export class GradleUploader extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    uploaderProperties: GradleUploaderProps ) {
+    uploaderProperties: UploaderProperties ) {
     super(scope, id);
 
-    const topic = this.createTopic(uploaderProperties);
+    const topic = this.createTopic();
+    if (uploaderProperties.mailProperties?.subscribers) {
+      this.addSubscribers(topic, uploaderProperties.mailProperties?.subscribers );
+    }
     const bucket = this.createBucket(uploaderProperties.whitelist);
     const layer = this.createLambdaLayer();
     const fn = this.createFunction(layer, bucket, topic);
+
+    if (uploaderProperties.slackProperties?.webhook) {
+      fn.addEnvironment('WEBHOOK_URL', uploaderProperties.slackProperties?.webhook);
+    }
+
     bucket.grantReadWrite(fn);
     topic.grantPublish(fn);
 
@@ -58,10 +91,11 @@ export class GradleUploader extends Construct {
   }
 
   private createFunction(layer: LayerVersion, bucket: Bucket, topic: Topic) {
+
     return new PythonFunction(this, 'fnUpload', {
       runtime: Runtime.PYTHON_3_8,
       description: 'Download Gradle distribution to S3 bucket',
-      index: 'gradleUploader.py',
+      index: 'gradle_uploader.py',
       handler: 'main',
       entry: './lambda',
       timeout: Duration.minutes(5),
@@ -79,16 +113,21 @@ export class GradleUploader extends Construct {
       entry: './lambda/',
       compatibleRuntimes: [Runtime.PYTHON_3_8],
       license: 'Apache-2.0',
-      description: 'A layer containing dependencies for thr Gradle Uploader',
+      description: 'A layer containing dependencies for the Gradle Uploader',
     });
   }
 
-  private createTopic(uploaderProperties: GradleUploaderProps) {
-    const topic = new Topic(this, 'NotificationTopic', {});
-    for (var subscriber of uploaderProperties.subscribers) {
+  /**
+   * Add mail subscriptions to the SNS topic.
+   * @param subscriber The mail addresses to add to the SNS topic as subscriber.
+   */
+  private addSubscribers(topic: Topic, subscribers:Array<string>) {
+    for (var subscriber of subscribers) {
       topic.addSubscription(new EmailSubscription(subscriber));
     }
-    return topic;
+  }
+  private createTopic() {
+    return new Topic(this, 'NotificationTopic', {});
   }
 
   createBucket(whitelist: Array<string>): Bucket {

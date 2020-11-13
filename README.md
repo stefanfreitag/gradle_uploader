@@ -1,18 +1,24 @@
 # Gradle Uploader
 
-This CDK stack monitors the releases of the [Gradle](https://gradle.org/) build software. Each new release will be made available as copy in an S3 bucket. Internally the stack uses
+This CDK construct checks for new releases of the [Gradle](https://gradle.org/) build software.
 
-* an [S3](https://aws.amazon.com/s3/) bucket for storing the Gradle software
-* a [Lambda](https://aws.amazon.com/lambda/) function and one Lambda layer to 
-    * check for the latest Gradle release
-    * upload if required and notify users via [SNS](https://aws.amazon.com/sns/) and e-Mail
-* a [Cloudwatch](https://aws.amazon.com/cloudwatch/) event rule to trigger the Lambda function
+The new release will be made available as copy in an S3 bucket. An information about
+the new release can be sent via e-mail or via Slack.
+
+Internally the construct uses
+
+- an [S3](https://aws.amazon.com/s3/) bucket for storing the Gradle software
+- a [Lambda](https://aws.amazon.com/lambda/) function and one Lambda layer to
+  - check for the latest Gradle release
+  - upload if required and notify users via [SNS](https://aws.amazon.com/sns/) and e-Mail or alternatively Slack
+- a [Cloudwatch](https://aws.amazon.com/cloudwatch/) event rule to trigger the Lambda function
 
 ## Setup of the components
 
 ### The S3 Bucket
 
 By default, public access to the S3 bucket is disabled. Only the access from a specific IP address (the one I got from my ISP) is allowed and ensured via [bucket policies](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html).
+
 ```javascript
   const bucket = new Bucket(this, "bucket", {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
@@ -49,7 +55,7 @@ By default, public access to the S3 bucket is disabled. Only the access from a s
 
 ## The Lambda function
 
-The Lambda function is written in Python 3. The execution time is limited to five
+The Lambda function is written in Python (Version 3.8). The execution time is limited to five
 minutes and the memory consumption to 512 MByte.
 
 Additionally the function gets read/ write access to the S3 bucket.
@@ -71,6 +77,9 @@ const fn = new Function(this, "fnUpload", {
 
 bucket.grantReadWrite(fn);
 ```
+
+If Slack is selected as notification channel, then also the `WEBHOOK_URL`
+is part of the `environment`.
 
 In the additional layer modules like boto3 are included.
 
@@ -97,20 +106,51 @@ new Rule(this, "ScheduleRule", {
 
 ## Notifying about new releases
 
-Whenever the release of a new Gradle version is detected, the stack will sent an e-mail to the list of subscriber. 
+Whenever the release of a new Gradle version is detected, the stack will sent an e-mail to the list of subscriber using SNS.
 
 ```javascript
-const topic = new Topic(this, "Topic", {
-  displayName: "Gradle uploader topic",
-});
-topic.addSubscription(new EmailSubscription("foo@bar.com"));
+private addSubscribers(topic: Topic, subscribers:Array<string>) {
+    for (var subscriber of subscribers) {
+      topic.addSubscription(new EmailSubscription(subscriber));
+    }
+  }
 ```
 
+The forwarding of information to Slack is done from within the Lambda function.
+
 ## Testing the Python code
+
 ```shell
 docker run --rm -v "$PWD":/var/task:ro,delegated   -v /home/stefan/Private/programmieren/aws/cdk/gradle_uploader/layer-code:/opt:ro,delegated  -e AWS_ACCESS_KEY_ID=XXXXXXXXXX -e AWS_SECRET_ACCESS_KEY=XXXXXXXXXX lambci/lambda:python3.8 gradleUploader.main
+```
+
+## How to use the construct in a stack
+
+Here is an example how to use the construct:
+
+```javascript
+export class GradleUploaderStack extends Stack {
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+    new GradleUploader(this, 'TestStack', {
+      mailProperties: { subscribers: ['<e-mail address>'] },
+      slackProperties: {
+        webhook:
+          'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+,
+      },
+      whitelist: ['CIDR_1', 'CIDR_2'],
+    });
+  }
+}
+
+const app = new App();
+new GradleUploaderStack(app, 'TestApp');
+app.synth();
 ```
 
 ## Links
 
 - [AWS Cloud Development Kit](https://github.com/aws/aws-cdk)
+- [Gradle Homepage](https://gradle.org/)
+- [boto3](https://github.com/boto/boto3)
