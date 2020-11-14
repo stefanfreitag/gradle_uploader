@@ -13,6 +13,8 @@ Internally the construct uses
   - upload if required and notify users via [SNS](https://aws.amazon.com/sns/) and e-Mail or alternatively Slack
 - a [Cloudwatch](https://aws.amazon.com/cloudwatch/) event rule to trigger the Lambda function
 
+![Overview](docs/overview.svg "Overview")
+
 ## Setup of the components
 
 ### The S3 Bucket
