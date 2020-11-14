@@ -14,7 +14,7 @@ from diagrams.aws.integration import SNS
 graph_attr={
     "bgcolor": "transparent"
 }
-with Diagram("Gradle Uploader", show=False, outformat="svg", filename="overview", graph_attr=graph_attr):
+with Diagram("Gradle Uploader", show=False, outformat="png", filename="overview", graph_attr=graph_attr):
 
     s3_bucket = S3(label="S3 Bucket")
     lambda_function = Lambda("Lambda function")
