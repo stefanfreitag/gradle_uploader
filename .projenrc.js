@@ -10,6 +10,7 @@ const project = new AwsCdkConstructLibrary({
   keywords: [
     "cdk", "gradle", "s3"
   ],
+  antitamper: false,
   catalog:{
     twitter: 'stefanfreitag',
     announce: false
