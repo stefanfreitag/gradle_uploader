@@ -47,7 +47,7 @@
     "jsii-pacmak": "^1.11.0",
     "jsii-release": "^0.1.6",
     "json-schema": "^0.2.5",
-    "projen": "^0.3.167",
+    "projen": "^0.3.168",
     "standard-version": "^9.0.0",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5"
@@ -194,10 +194,6 @@
       "python": {
         "distName": "cdk-gradle-uploader",
         "module": "cdk_gradle_uploader"
-      },
-      "dotnet": {
-        "namespace": "De.Freitag.Stefan.Aws.Cdk",
-        "packageId": "CdkGradleUploader"
       }
     },
     "tsc": {

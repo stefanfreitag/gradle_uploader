@@ -34,13 +34,15 @@ const project = new AwsCdkConstructLibrary({
     javaPackage: 'io.github.stefanfreitag.cdk.gradleuploader',
     mavenGroupId: 'io.github.stefanfreitag',
     mavenArtifactId: 'cdkGradleUploader'
-  },
-  dotnet:{
-    dotNetNamespace: "De.Freitag.Stefan.Aws.Cdk",
-    packageId: "CdkGradleUploader"
   }
+//,
+//  dotnet:{
+//    dotNetNamespace: "De.Freitag.Stefan.Aws.Cdk",
+//    packageId: "CdkGradleUploader"
+//  }
 
 
 });
 
+project.gitignore.exclude("__pycache__/", "layer-code/python/")
 project.synth();

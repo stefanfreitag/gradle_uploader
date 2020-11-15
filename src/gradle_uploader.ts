@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { Schedule, Rule } from '@aws-cdk/aws-events';
 import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { AnyPrincipal, PolicyStatement, Effect } from '@aws-cdk/aws-iam';
@@ -5,8 +6,8 @@ import {
   Function,
   Runtime,
   LayerVersion,
+  Code,
 } from '@aws-cdk/aws-lambda';
-import { PythonFunction, PythonLayerVersion } from '@aws-cdk/aws-lambda-python';
 import {
   Bucket,
   BlockPublicAccess,
@@ -16,6 +17,7 @@ import {
 import { Topic } from '@aws-cdk/aws-sns';
 import { EmailSubscription } from '@aws-cdk/aws-sns-subscriptions';
 import { Duration, CfnOutput, RemovalPolicy, Construct } from '@aws-cdk/core';
+
 
 /**
  * Properties related to forwarding messages to Slack.
@@ -92,12 +94,11 @@ export class GradleUploader extends Construct {
 
   private createFunction(layer: LayerVersion, bucket: Bucket, topic: Topic) {
 
-    return new PythonFunction(this, 'fnUpload', {
+    return new Function(this, 'fnUpload', {
       runtime: Runtime.PYTHON_3_8,
       description: 'Download Gradle distribution to S3 bucket',
-      index: 'gradle_uploader.py',
+      code: Code.fromAsset(path.join(__dirname, '../lambda')),
       handler: 'main',
-      entry: './lambda',
       timeout: Duration.minutes(5),
       memorySize: 512,
       layers: [layer],
@@ -108,9 +109,9 @@ export class GradleUploader extends Construct {
     });
   }
 
-  private createLambdaLayer(): PythonLayerVersion {
-    return new PythonLayerVersion(this, 'GradleUploaderLayer', {
-      entry: './lambda/',
+  private createLambdaLayer(): LayerVersion {
+    return new LayerVersion(this, 'GradleUploaderLayer', {
+      code: Code.fromAsset(path.join(__dirname, '../layer-code')),
       compatibleRuntimes: [Runtime.PYTHON_3_8],
       license: 'Apache-2.0',
       description: 'A layer containing dependencies for the Gradle Uploader',

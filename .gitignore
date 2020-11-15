@@ -40,6 +40,8 @@ jspm_packages/
 /dist
 .jsii
 tsconfig.json
+__pycache__/
+layer-code/python/
 !/package.json
 !/.npmignore
 !/LICENSE
