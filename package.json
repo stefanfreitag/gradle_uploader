@@ -13,7 +13,7 @@
     "no-changes": "(git log --oneline -1 | grep -q \"chore(release):\") && echo \"No changes to release.\"",
     "bump": "yarn run --silent no-changes || standard-version",
     "release": "yarn run --silent no-changes || (yarn run bump && git push --follow-tags origin master)",
-    "test": "rm -fr lib/ && jest --passWithNoTests --updateSnapshot && yarn run eslint",
+    "test": "rm -fr lib/ && jest --passWithNoTests && yarn run eslint",
     "test:watch": "jest --watch",
     "test:update": "jest --updateSnapshot",
     "projen:upgrade": "yarn upgrade -L projen && CI=\"\" yarn projen",
@@ -47,7 +47,7 @@
     "jsii-pacmak": "^1.11.0",
     "jsii-release": "^0.1.6",
     "json-schema": "^0.2.5",
-    "projen": "^0.3.167",
+    "projen": "^0.3.168",
     "standard-version": "^9.0.0",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5"
@@ -194,10 +194,6 @@
       "python": {
         "distName": "cdk-gradle-uploader",
         "module": "cdk_gradle_uploader"
-      },
-      "dotnet": {
-        "namespace": "De.Freitag.Stefan.Aws.Cdk",
-        "packageId": "CdkGradleUploader"
       }
     },
     "tsc": {

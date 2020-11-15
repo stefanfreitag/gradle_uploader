@@ -2,7 +2,6 @@ import {
   expect as expectCDK,
   haveResource,
   haveResourceLike,
-  SynthUtils,
 } from '@aws-cdk/assert';
 import { Stack } from '@aws-cdk/core';
 import { GradleUploader } from '../src/gradle_uploader';
@@ -14,8 +13,6 @@ test('S3 bucket is encrypted and not public accessible ', () => {
     mailProperties: { subscribers: ['john.doe@foobar.com'] },
     whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
   });
-
-  expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
 
   // Then
   expectCDK(stack).to(
