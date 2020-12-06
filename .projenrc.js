@@ -3,7 +3,7 @@ const { AwsCdkConstructLibrary } = require('projen');
 const project = new AwsCdkConstructLibrary({
   authorAddress: "stefan.freitag@udo.edu",
   authorName: "Stefan Freitag",
-  name: "Gradle_S3_Uploader",
+  name: "gradle_s3_uploader",
   description:"Uploads new Gradle versions to an S3 bucket",
   repository: "https://github.com/stefan.freitag/projen_gradle_uploader.git",
   cdkVersion: "1.76.0",
