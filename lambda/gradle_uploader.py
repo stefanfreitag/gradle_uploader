@@ -1,3 +1,4 @@
+from collections.abc import Set
 import json
 import logging
 import os
@@ -10,6 +11,8 @@ import requests
 from botocore.exceptions import ClientError
 from requests.exceptions import HTTPError
 
+from enum import Enum, auto, unique
+
 logger = getLogger()
 logger.setLevel(INFO)
 
@@ -17,6 +20,17 @@ logger.setLevel(INFO)
 S3_BUCKET = "<undefined>"
 
 GRADLE_CURRENT_VERSION_METAINFO_URL = "https://services.gradle.org/versions/current"
+
+
+@unique
+class GradleDistribution(Enum):
+    """
+    The different types of Gradle distributions that can be downloaded.
+    """
+
+    BIN = (auto(), "Binary only")
+    ALL = (auto(), "Binary, Sources, Docs")
+    BOTH = (auto(), "Both distributions")
 
 
 class MetaInfo:
@@ -39,15 +53,20 @@ def get_meta_info() -> MetaInfo:
     return MetaInfo(json_data)
 
 
-def download_version(meta_info: MetaInfo):
-    file_name = os.path.basename(meta_info.download_url)
-    print("Downloading " + meta_info.download_url + " to " + file_name)
+def download_file(url: str):
+    """
+    Download a remote file to the tmp folder.
+    :param url:  The URL of the remote file.
+    :param target: The target (filename and path) on the local filesystem.
+    
+    """
+
+    file_name = os.path.basename(url)
+    target = "/tmp/" + file_name
     try:
-        result = requests.get(meta_info.download_url, timeout=5)
-        logging.info("Writing file")
-        print("Writing file")
-        open("/tmp/" + file_name, "wb").write(result.content)
-        print("Finished downloading data")
+        result = requests.get(url, timeout=5)
+        logging.info("Writing " + url + " to " + target)
+        open(target, "wb").write(result.content)
     except requests.exceptions.Timeout:
         print("Timeout")
     except requests.exceptions.TooManyRedirects:
@@ -56,12 +75,18 @@ def download_version(meta_info: MetaInfo):
         print("Other error")
 
 
-def upload_version(meta_info: MetaInfo, bucket_name: str) -> bool:
+def upload_version(url: str, bucket_name: str) -> bool:
+    """
+    Upload a file to a S3 bucket. The file name is taken from the provided url.
+    :param url:  The URL of the remote file.
+    :param bucket_name: The name of the S3 bucket
+    """
+
     session = boto3.Session()
     s3_client = session.client("s3")
     try:
-        print("Uploading...")
-        file_name = os.path.basename(meta_info.download_url)
+        file_name = os.path.basename(url)
+        print("Uploading " + file_name + " ...")
         s3_client.upload_file("/tmp/" + file_name, bucket_name, file_name)
         print("Upload done")
     except ClientError as e:
@@ -84,7 +109,7 @@ def check_existence(meta_info: MetaInfo, bucket_name: str) -> bool:
         response = s3_client.head_object(Key=file_name, Bucket=S3_BUCKET)
         logging.info(response)
         return True
-    except ClientError as e:
+    except ClientError:
         logging.error("Not found")
         print("Not found")
         return False
@@ -122,14 +147,33 @@ def send_slack_message(message: str, webhook_url: str):
         logger.error("Request failed: %d %s", err.code, err.reason)
 
 
+def distribution_to_urls(meta_info: MetaInfo, distribution: str) -> Set:
+    urls = set()
+    if (distribution == GradleDistribution.BIN.name) or (
+        distribution == GradleDistribution.BOTH.name
+    ):
+        urls.add(meta_info.download_url)
+    if (distribution == GradleDistribution.ALL.name) or (
+        distribution == GradleDistribution.BOTH.name
+    ):
+        url = meta_info.download_url.replace("-bin.zip", "-all.zip")
+        urls.add(url)
+    return urls
+
+
 def main(event, context):
     global S3_BUCKET
     try:
         S3_BUCKET = os.environ["BUCKET_NAME"]
         TOPIC_ARN = os.environ["TOPIC_ARN"]
+        GRADLE_DISTRIBUTION = os.environ["GRADLE_DISTRIBUTION"]
+
         logging.info("S3 Bucket used as target: " + S3_BUCKET)
         meta_info = get_meta_info()
+
         logging.info("Current Gradle Version:" + meta_info.version)
+
+        # Check based on distribution type
         if check_existence(meta_info, S3_BUCKET):
             logging.info(
                 "No action required. Latest Gradle version "
@@ -137,8 +181,12 @@ def main(event, context):
                 + " available in S3."
             )
         else:
-            download_version(meta_info)
-            upload_version(meta_info=meta_info, bucket_name=S3_BUCKET)
+            download_urls = distribution_to_urls(
+                meta_info=meta_info, distribution=GRADLE_DISTRIBUTION
+            )
+            for entry in download_urls:
+                download_file(entry)
+                upload_version(entry, bucket_name=S3_BUCKET)
             ##Send mail
             sns = boto3.client("sns")
             response = (
@@ -153,7 +201,7 @@ def main(event, context):
             send_slack_message(slack_message, os.environ["WEBHOOK_URL"])
 
     except KeyError as identifier:
-        print("S3 Bucket name not specified " + identifier)
+        print("Key error for " + str(identifier))
 
 
 if __name__ == "__main__":

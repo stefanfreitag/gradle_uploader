@@ -138,8 +138,7 @@ export class GradleUploaderStack extends Stack {
       mailProperties: { subscribers: ['<e-mail address>'] },
       slackProperties: {
         webhook:
-          'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
-,
+          'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX',
       },
       whitelist: ['CIDR_1', 'CIDR_2'],
     });

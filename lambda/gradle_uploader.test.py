@@ -1,6 +1,8 @@
 from gradle_uploader import (
     get_meta_info,
     MetaInfo,
+    GradleDistribution,
+    distribution_to_urls,
     send_slack_message,
     create_slack_message,
 )
@@ -50,7 +52,7 @@ class TestStringMethods(unittest.TestCase):
             message,
         )
 
-    # @unittest.skip("Can be used for sending test messages to Slack")
+    @unittest.skip("Can be used for sending test messages to Slack")
     def test_send_slack_message(self):
 
         meta_info = MetaInfo(downloaded_info)
@@ -79,6 +81,23 @@ class TestStringMethods(unittest.TestCase):
             meta_info.checksum_url,
             "https://services.gradle.org/distributions/gradle-6.7-bin.zip.sha256",
         )
+
+    def test_distribution_to_urls(self):
+        url_all = "https://services.gradle.org/distributions/gradle-6.7-all.zip"
+        url_bin = "https://services.gradle.org/distributions/gradle-6.7-bin.zip"
+        meta_info = MetaInfo(downloaded_info)
+        result = distribution_to_urls(meta_info, GradleDistribution.BIN.name)
+
+        self.assertTrue(url_bin in result)
+        self.assertTrue(url_all not in result)
+
+        result = distribution_to_urls(meta_info, GradleDistribution.ALL.name)
+        self.assertTrue(url_all in result)
+        self.assertTrue(url_bin not in result)
+
+        result = distribution_to_urls(meta_info, GradleDistribution.BOTH.name)
+        self.assertTrue(url_all in result)
+        self.assertTrue(url_bin in result)
 
 
 if __name__ == "__main__":

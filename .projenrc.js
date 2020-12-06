@@ -6,7 +6,8 @@ const project = new AwsCdkConstructLibrary({
   name: "Gradle_S3_Uploader",
   description:"Uploads new Gradle versions to an S3 bucket",
   repository: "https://github.com/stefan.freitag/projen_gradle_uploader.git",
-  cdkVersion: "1.73.0",
+  cdkVersion: "1.76.0",
+  codeCov: true,
   keywords: [
     "cdk", "gradle", "s3"
   ],
@@ -22,6 +23,7 @@ const project = new AwsCdkConstructLibrary({
     "@aws-cdk/aws-iam",
     "@aws-cdk/aws-lambda",
     "@aws-cdk/aws-lambda-python",
+    "@aws-cdk/aws-logs",
     "@aws-cdk/aws-s3",
     "@aws-cdk/aws-sns",
     "@aws-cdk/aws-sns-subscriptions",
@@ -35,12 +37,11 @@ const project = new AwsCdkConstructLibrary({
     javaPackage: 'io.github.stefanfreitag.cdk.gradleuploader',
     mavenGroupId: 'io.github.stefanfreitag',
     mavenArtifactId: 'cdkGradleUploader'
-  }
-//,
-//  dotnet:{
-//    dotNetNamespace: "De.Freitag.Stefan.Aws.Cdk",
-//    packageId: "CdkGradleUploader"
-//  }
+  },
+  //dotnet:{
+  // dotNetNamespace: "De.Freitag.Stefan.Aws.Cdk",
+  //  packageId: "CdkGradleUploader"
+  //}
 
 
 });
