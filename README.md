@@ -57,10 +57,7 @@ By default, public access to the S3 bucket is disabled. Only the access from a s
 
 ## The Lambda function
 
-The Lambda function is written in Python (Version 3.8). The execution time is limited to five
-minutes and the memory consumption to 512 MByte.
-
-Additionally the function gets read/ write access to the S3 bucket.
+The Lambda function is written in Python (version 3.8). The execution time is limited to five minutes and the memory consumption to 512 MByte. Additionally the function gets read/ write access to the S3 bucket and has a log retention period is set to one week.
 
 ```javascript
 const fn = new Function(this, "fnUpload", {
@@ -70,6 +67,7 @@ const fn = new Function(this, "fnUpload", {
   code: Code.fromAsset("./lambda/"),
   timeout: Duration.minutes(5),
   memorySize: 512,
+  logRetention: RetentionDays.ONE_WEEK,
   layers: [layer],
   environment: {
     BUCKET_NAME: bucket.bucketName,
@@ -118,7 +116,7 @@ private addSubscribers(topic: Topic, subscribers:Array<string>) {
   }
 ```
 
-The forwarding of information to Slack is done from within the Lambda function.
+The forwarding of information to a [Slack](https://slack.com/) channel is done from within the Lambda function.
 
 ## Testing the Python code
 
@@ -138,8 +136,7 @@ export class GradleUploaderStack extends Stack {
       mailProperties: { subscribers: ['<e-mail address>'] },
       slackProperties: {
         webhook:
-          'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
-,
+          'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX',
       },
       whitelist: ['CIDR_1', 'CIDR_2'],
     });

@@ -8,6 +8,7 @@ import {
   LayerVersion,
   Code,
 } from '@aws-cdk/aws-lambda';
+import { RetentionDays } from '@aws-cdk/aws-logs';
 import {
   Bucket,
   BlockPublicAccess,
@@ -37,6 +38,24 @@ export interface MailProperties {
   readonly subscribers: Array<string>;
 }
 
+/**
+ * Types of available Gradle distributions.
+ */
+export enum GradleDistribution{
+  /**
+   * Binaries only.
+   */
+  BIN,
+  /**
+   * Binaries, sources and documentation.
+   */
+  ALL,
+  /**
+   * BINARY and ALL.
+   */
+  BOTH
+}
+
 export interface UploaderProperties {
   /**
    * Optional properties required for sending messages via Slack.
@@ -48,6 +67,10 @@ export interface UploaderProperties {
   readonly mailProperties?: MailProperties;
   readonly whitelist: Array<string>;
   readonly schedule?: Schedule;
+  /**
+   * The {@link GradleDistribution | Gradle distribution} type to download. If no value is specified, only the binaries will be downloaded.
+   */
+  readonly distribution?: GradleDistribution;
 }
 
 export class GradleUploader extends Construct {
@@ -68,6 +91,15 @@ export class GradleUploader extends Construct {
     if (uploaderProperties.slackProperties?.webhook) {
       fn.addEnvironment('WEBHOOK_URL', uploaderProperties.slackProperties?.webhook);
     }
+
+    let distribution: GradleDistribution;
+    if (uploaderProperties.distribution === undefined) {
+      distribution = GradleDistribution.BIN;
+    } else {
+      distribution = uploaderProperties.distribution;
+    }
+    fn.addEnvironment('GRADLE_DISTRIBUTION', GradleDistribution[distribution]);
+
 
     bucket.grantReadWrite(fn);
     topic.grantPublish(fn);
@@ -98,9 +130,10 @@ export class GradleUploader extends Construct {
       runtime: Runtime.PYTHON_3_8,
       description: 'Download Gradle distribution to S3 bucket',
       code: Code.fromAsset(path.join(__dirname, '../lambda')),
-      handler: 'main',
+      handler: 'gradle_uploader.main',
       timeout: Duration.minutes(5),
       memorySize: 512,
+      logRetention: RetentionDays.ONE_WEEK,
       layers: [layer],
       environment: {
         BUCKET_NAME: bucket.bucketName,

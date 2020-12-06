@@ -16,6 +16,13 @@ Name|Description
 [UploaderProperties](#gradle-s3-uploader-uploaderproperties)|*No description*
 
 
+**Enums**
+
+Name|Description
+----|-----------
+[GradleDistribution](#gradle-s3-uploader-gradledistribution)|Types of available Gradle distributions.
+
+
 
 ## class GradleUploader  <a id="gradle-s3-uploader-gradleuploader"></a>
 
@@ -37,6 +44,7 @@ new GradleUploader(scope: Construct, id: string, uploaderProperties: UploaderPro
 * **id** (<code>string</code>)  *No description*
 * **uploaderProperties** (<code>[UploaderProperties](#gradle-s3-uploader-uploaderproperties)</code>)  *No description*
   * **whitelist** (<code>Array<string></code>)  *No description* 
+  * **distribution** (<code>[GradleDistribution](#gradle-s3-uploader-gradledistribution)</code>)  The {@link GradleDistribution | Gradle distribution} type to download. __*Optional*__
   * **mailProperties** (<code>[MailProperties](#gradle-s3-uploader-mailproperties)</code>)  Optional properties required for sending messages via mail. __*Optional*__
   * **schedule** (<code>[Schedule](#aws-cdk-aws-events-schedule)</code>)  *No description* __*Optional*__
   * **slackProperties** (<code>[SlackProperties](#gradle-s3-uploader-slackproperties)</code>)  Optional properties required for sending messages via Slack. __*Optional*__
@@ -96,9 +104,21 @@ Name | Type | Description
 Name | Type | Description 
 -----|------|-------------
 **whitelist** | <code>Array<string></code> | <span></span>
+**distribution**? | <code>[GradleDistribution](#gradle-s3-uploader-gradledistribution)</code> | The {@link GradleDistribution | Gradle distribution} type to download.<br/>__*Optional*__
 **mailProperties**? | <code>[MailProperties](#gradle-s3-uploader-mailproperties)</code> | Optional properties required for sending messages via mail.<br/>__*Optional*__
 **schedule**? | <code>[Schedule](#aws-cdk-aws-events-schedule)</code> | __*Optional*__
 **slackProperties**? | <code>[SlackProperties](#gradle-s3-uploader-slackproperties)</code> | Optional properties required for sending messages via Slack.<br/>__*Optional*__
 
+
+
+## enum GradleDistribution  <a id="gradle-s3-uploader-gradledistribution"></a>
+
+Types of available Gradle distributions.
+
+Name | Description
+-----|-----
+**BIN** |Binaries only.
+**ALL** |Binaries, sources and documentation.
+**BOTH** |BINARY and ALL.
 
 
