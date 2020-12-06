@@ -153,3 +153,4 @@ app.synth();
 - [AWS Cloud Development Kit](https://github.com/aws/aws-cdk)
 - [Gradle Homepage](https://gradle.org/)
 - [boto3](https://github.com/boto/boto3)
+- [Slack](https://slack.com/)
