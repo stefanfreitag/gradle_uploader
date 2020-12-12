@@ -6,7 +6,7 @@ const project = new AwsCdkConstructLibrary({
   name: "gradle_s3_uploader",
   description:"Uploads new Gradle versions to an S3 bucket",
   repository: "https://github.com/stefan.freitag/projen_gradle_uploader.git",
-  cdkVersion: "1.76.0",
+  cdkVersion: "1.78.0",
   codeCov: true,
   keywords: [
     "cdk", "gradle", "s3"
