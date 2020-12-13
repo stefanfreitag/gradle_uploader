@@ -1,4 +1,4 @@
-const { AwsCdkConstructLibrary } = require('projen');
+const { AwsCdkConstructLibrary, Stability } = require('projen');
 
 const project = new AwsCdkConstructLibrary({
   authorAddress: "stefan.freitag@udo.edu",
@@ -29,6 +29,11 @@ const project = new AwsCdkConstructLibrary({
     "@aws-cdk/aws-sns-subscriptions",
     "@aws-cdk/core"
   ],
+  stability: Stability.STABLE,
+  scripts:{
+    "build": "cd layer-code;./install.sh; cd ..; yarn run test && yarn run compile && yarn run package",
+    "install_layer": "cd layer-code;./install.sh"
+  },
   python: {
     distName:'cdk-gradle-uploader',
     module: 'cdk_gradle_uploader',
@@ -46,5 +51,5 @@ const project = new AwsCdkConstructLibrary({
 
 });
 
-project.gitignore.exclude("__pycache__/", "layer-code/python/")
+project.gitignore.exclude("__pycache__/", "layer-code/python/");
 project.synth();
