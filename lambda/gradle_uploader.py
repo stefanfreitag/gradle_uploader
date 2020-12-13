@@ -130,7 +130,7 @@ def create_slack_message(meta_info: MetaInfo) -> str:
         f"}}"
     )
 
-    basic_block: str = (f"""{{ "blocks": [ {header}, {body} ] }}""")
+    basic_block: str = (f"""{{ "text": "A new Gradle version is available.", "blocks": [ {header}, {body} ] }}""")
     return basic_block
 
 
