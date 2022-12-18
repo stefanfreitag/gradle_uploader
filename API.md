@@ -28,8 +28,8 @@ Name|Description
 
 
 
-__Implements__: [IConstruct](#constructs-iconstruct), [IConstruct](#aws-cdk-core-iconstruct), [IConstruct](#constructs-iconstruct), [IDependable](#aws-cdk-core-idependable)
-__Extends__: [Construct](#aws-cdk-core-construct)
+__Implements__: [IConstruct](#constructs-iconstruct), [IDependable](#constructs-idependable)
+__Extends__: [Construct](#constructs-construct)
 
 ### Initializer
 
@@ -40,13 +40,13 @@ __Extends__: [Construct](#aws-cdk-core-construct)
 new GradleUploader(scope: Construct, id: string, uploaderProperties: UploaderProperties)
 ```
 
-* **scope** (<code>[Construct](#aws-cdk-core-construct)</code>)  *No description*
+* **scope** (<code>[Construct](#constructs-construct)</code>)  *No description*
 * **id** (<code>string</code>)  *No description*
 * **uploaderProperties** (<code>[UploaderProperties](#gradle-s3-uploader-uploaderproperties)</code>)  *No description*
   * **whitelist** (<code>Array<string></code>)  *No description* 
   * **distribution** (<code>[GradleDistribution](#gradle-s3-uploader-gradledistribution)</code>)  The {@link GradleDistribution | Gradle distribution} type to download. __*Optional*__
   * **mailProperties** (<code>[MailProperties](#gradle-s3-uploader-mailproperties)</code>)  Optional properties required for sending messages via mail. __*Optional*__
-  * **schedule** (<code>[Schedule](#aws-cdk-aws-events-schedule)</code>)  *No description* __*Optional*__
+  * **schedule** (<code>[aws_events.Schedule](#aws-cdk-lib-aws-events-schedule)</code>)  *No description* __*Optional*__
   * **slackProperties** (<code>[SlackProperties](#gradle-s3-uploader-slackproperties)</code>)  Optional properties required for sending messages via Slack. __*Optional*__
 
 
@@ -64,7 +64,7 @@ createBucket(whitelist: Array<string>): Bucket
 * **whitelist** (<code>Array<string></code>)  *No description*
 
 __Returns__:
-* <code>[Bucket](#aws-cdk-aws-s3-bucket)</code>
+* <code>[aws_s3.Bucket](#aws-cdk-lib-aws-s3-bucket)</code>
 
 
 
@@ -106,7 +106,7 @@ Name | Type | Description
 **whitelist** | <code>Array<string></code> | <span></span>
 **distribution**? | <code>[GradleDistribution](#gradle-s3-uploader-gradledistribution)</code> | The {@link GradleDistribution | Gradle distribution} type to download.<br/>__*Optional*__
 **mailProperties**? | <code>[MailProperties](#gradle-s3-uploader-mailproperties)</code> | Optional properties required for sending messages via mail.<br/>__*Optional*__
-**schedule**? | <code>[Schedule](#aws-cdk-aws-events-schedule)</code> | __*Optional*__
+**schedule**? | <code>[aws_events.Schedule](#aws-cdk-lib-aws-events-schedule)</code> | __*Optional*__
 **slackProperties**? | <code>[SlackProperties](#gradle-s3-uploader-slackproperties)</code> | Optional properties required for sending messages via Slack.<br/>__*Optional*__
 
 
