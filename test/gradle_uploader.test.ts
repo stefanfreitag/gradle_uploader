@@ -1,9 +1,5 @@
-import {
-  expect as expectCDK,
-  haveResource,
-  haveResourceLike,
-} from '@aws-cdk/assert';
-import { Stack } from '@aws-cdk/core';
+import { Template } from 'aws-cdk-lib/assertions';
+import { Stack } from 'aws-cdk-lib/core';
 import { GradleDistribution, GradleUploader } from '../src/gradle_uploader';
 
 test('S3 bucket is encrypted and not public accessible ', () => {
@@ -13,26 +9,26 @@ test('S3 bucket is encrypted and not public accessible ', () => {
     mailProperties: { subscribers: ['john.doe@foobar.com'] },
     whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
   });
+  const template = Template.fromStack(stack);
 
   // Then
-  expectCDK(stack).to(
-    haveResource('AWS::S3::Bucket', {
-      PublicAccessBlockConfiguration: {
-        BlockPublicAcls: true,
-        BlockPublicPolicy: true,
-        IgnorePublicAcls: true,
-        RestrictPublicBuckets: true,
-      },
-      BucketEncryption: {
-        ServerSideEncryptionConfiguration: [
-          {
-            ServerSideEncryptionByDefault: {
-              SSEAlgorithm: 'AES256',
-            },
+  template.hasResourceProperties('AWS::S3::Bucket', {
+    PublicAccessBlockConfiguration: {
+      BlockPublicAcls: true,
+      BlockPublicPolicy: true,
+      IgnorePublicAcls: true,
+      RestrictPublicBuckets: true,
+    },
+    BucketEncryption: {
+      ServerSideEncryptionConfiguration: [
+        {
+          ServerSideEncryptionByDefault: {
+            SSEAlgorithm: 'AES256',
           },
-        ],
-      },
-    }),
+        },
+      ],
+    },
+  },
   );
 });
 
@@ -43,8 +39,9 @@ test('SNS topic is setup ', () => {
     mailProperties: { subscribers: ['john.doe@foobar.com'] },
     whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
   });
+  const template = Template.fromStack(stack);
+  template.hasResource('AWS::SNS::Topic', {});
 
-  expectCDK(stack).to(haveResource('AWS::SNS::Topic'));
 });
 
 test('SNS subscription is setup ', () => {
@@ -55,11 +52,12 @@ test('SNS subscription is setup ', () => {
     whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
   });
 
-  expectCDK(stack).to(
-    haveResource('AWS::SNS::Subscription', {
-      Protocol: 'email',
-      Endpoint: 'john.doe@foobar.com',
-    }),
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::SNS::Subscription', {
+    Protocol: 'email',
+    Endpoint: 'john.doe@foobar.com',
+  },
   );
 });
 
@@ -71,10 +69,11 @@ test('Lambda function is setup ', () => {
     whitelist: ['87.122.220.125/32', '87.122.210.146/32'],
   });
 
-  expectCDK(stack).to(
-    haveResource('AWS::Lambda::Function', {
-      Runtime: 'python3.8',
-    }),
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    Runtime: 'python3.8',
+  },
   );
 });
 
@@ -90,22 +89,23 @@ test('Slack Webhook defined as Lambda environment variable', () => {
     },
   });
 
-  expectCDK(stack).to(
-    haveResourceLike('AWS::Lambda::Function', {
-      Environment: {
-        Variables: {
-          WEBHOOK_URL:
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    Environment: {
+      Variables: {
+        WEBHOOK_URL:
             'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX',
-          GRADLE_DISTRIBUTION: 'BIN',
-        },
+        GRADLE_DISTRIBUTION: 'BIN',
       },
-    }),
+    },
+  },
   );
-  expectCDK(stack).to(
-    haveResourceLike('AWS::SNS::Subscription', {
-      Endpoint: 'john.doe@foobar.com',
-      Protocol: 'email',
-    }),
+
+  template.hasResourceProperties('AWS::SNS::Subscription', {
+    Endpoint: 'john.doe@foobar.com',
+    Protocol: 'email',
+  },
   );
 });
 
@@ -118,13 +118,14 @@ test('Gradle Distribution selection forwarded to Lambda', () => {
     distribution: GradleDistribution.ALL,
   });
 
-  expectCDK(stack).to(
-    haveResourceLike('AWS::Lambda::Function', {
-      Environment: {
-        Variables: {
-          GRADLE_DISTRIBUTION: 'ALL',
-        },
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    Environment: {
+      Variables: {
+        GRADLE_DISTRIBUTION: 'ALL',
       },
-    }),
+    },
+  },
   );
 });

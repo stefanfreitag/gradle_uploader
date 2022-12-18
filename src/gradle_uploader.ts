@@ -1,24 +1,24 @@
 import * as path from 'path';
-import { Schedule, Rule } from '@aws-cdk/aws-events';
-import { LambdaFunction } from '@aws-cdk/aws-events-targets';
-import { AnyPrincipal, PolicyStatement, Effect } from '@aws-cdk/aws-iam';
 import {
   Function,
   Runtime,
   LayerVersion,
   Code,
-} from '@aws-cdk/aws-lambda';
-import { RetentionDays } from '@aws-cdk/aws-logs';
+} from 'aws-cdk-lib//aws-lambda';
+import { RetentionDays } from 'aws-cdk-lib//aws-logs';
+import { Topic } from 'aws-cdk-lib//aws-sns';
+import { EmailSubscription } from 'aws-cdk-lib//aws-sns-subscriptions';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import {
   Bucket,
   BlockPublicAccess,
   BucketEncryption,
   BucketPolicy,
-} from '@aws-cdk/aws-s3';
-import { Topic } from '@aws-cdk/aws-sns';
-import { EmailSubscription } from '@aws-cdk/aws-sns-subscriptions';
-import { Duration, CfnOutput, RemovalPolicy, Construct } from '@aws-cdk/core';
-
+} from 'aws-cdk-lib/aws-s3';
+import { CfnOutput, Duration, RemovalPolicy } from 'aws-cdk-lib/core';
+import { Construct } from 'constructs';
 
 /**
  * Properties related to forwarding messages to Slack.
