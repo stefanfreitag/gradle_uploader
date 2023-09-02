@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@types/jest",
-      "version": "^27",
+      "version": "^29",
       "type": "build"
     },
     {
@@ -22,7 +22,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.58.1",
+      "version": "2.93.0",
       "type": "build"
     },
     {
@@ -54,7 +54,7 @@
     },
     {
       "name": "jest",
-      "version": "^27",
+      "version": "^29",
       "type": "build"
     },
     {
@@ -95,11 +95,12 @@
     },
     {
       "name": "ts-jest",
-      "version": "^27",
+      "version": "^29",
       "type": "build"
     },
     {
       "name": "typescript",
+      "version": "^5",
       "type": "build"
     },
     {
@@ -114,7 +115,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.58.1",
+      "version": "^2.93.0",
       "type": "peer"
     },
     {
