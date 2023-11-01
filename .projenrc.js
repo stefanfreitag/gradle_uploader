@@ -8,7 +8,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: 'gradle_s3_uploader',
   description: 'Uploads new Gradle versions to an S3 bucket',
   repository: 'https://github.com/stefanfreitag/projen_gradle_uploader.git',
-  cdkVersion: '2.58.1',
+  cdkVersion: '2.103.1',
   codeCov: true,
   defaultReleaseBranch: 'master',
   depsUpgradeOptions: {
@@ -39,7 +39,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     mavenArtifactId: 'cdkGradleUploader',
   },
 
-
+  typescriptVersion: '^4.3.5',
 });
 
 const common_exclude = ['.history/', '__pycache__/', 'layer-code/python/'];
