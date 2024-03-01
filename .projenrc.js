@@ -7,8 +7,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   authorName: 'Stefan Freitag',
   name: 'gradle_s3_uploader',
   description: 'Uploads new Gradle versions to an S3 bucket',
-  repository: 'https://github.com/stefanfreitag/projen_gradle_uploader.git',
-  cdkVersion: '2.103.1',
+  repository: 'https://github.com/stefanfreitag/gradle_uploader.git',
+  cdkVersion: '2.130.0',
   codeCov: true,
   defaultReleaseBranch: 'master',
   depsUpgradeOptions: {

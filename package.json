@@ -3,7 +3,7 @@
   "description": "Uploads new Gradle versions to an S3 bucket",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stefanfreitag/projen_gradle_uploader.git"
+    "url": "https://github.com/stefanfreitag/gradle_uploader.git"
   },
   "scripts": {
     "build": "npx projen build",
@@ -43,7 +43,7 @@
     "@types/node": "^16 <= 16.18.78",
     "@typescript-eslint/eslint-plugin": "^6",
     "@typescript-eslint/parser": "^6",
-    "aws-cdk-lib": "2.103.1",
+    "aws-cdk-lib": "2.130.0",
     "constructs": "10.0.5",
     "eslint": "^8",
     "eslint-import-resolver-typescript": "^2.7.1",
@@ -61,7 +61,7 @@
     "typescript": "^4.3.5"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.103.1",
+    "aws-cdk-lib": "^2.130.0",
     "constructs": "^10.0.5"
   },
   "resolutions": {
