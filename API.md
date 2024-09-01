@@ -1,124 +1,300 @@
-# API Reference
+# API Reference <a name="API Reference" id="api-reference"></a>
 
-**Classes**
+## Constructs <a name="Constructs" id="Constructs"></a>
 
-Name|Description
-----|-----------
-[GradleUploader](#gradle-s3-uploader-gradleuploader)|*No description*
+### GradleUploader <a name="GradleUploader" id="gradle_s3_uploader.GradleUploader"></a>
 
+#### Initializers <a name="Initializers" id="gradle_s3_uploader.GradleUploader.Initializer"></a>
 
-**Structs**
+```typescript
+import { GradleUploader } from 'gradle_s3_uploader'
 
-Name|Description
-----|-----------
-[MailProperties](#gradle-s3-uploader-mailproperties)|Properties related to forwarding messages via mail.
-[SlackProperties](#gradle-s3-uploader-slackproperties)|Properties related to forwarding messages to Slack.
-[UploaderProperties](#gradle-s3-uploader-uploaderproperties)|*No description*
-
-
-**Enums**
-
-Name|Description
-----|-----------
-[GradleDistribution](#gradle-s3-uploader-gradledistribution)|Types of available Gradle distributions.
-
-
-
-## class GradleUploader  <a id="gradle-s3-uploader-gradleuploader"></a>
-
-
-
-__Implements__: [IConstruct](#constructs-iconstruct), [IDependable](#constructs-idependable)
-__Extends__: [Construct](#constructs-construct)
-
-### Initializer
-
-
-
-
-```ts
 new GradleUploader(scope: Construct, id: string, uploaderProperties: UploaderProperties)
 ```
 
-* **scope** (<code>[Construct](#constructs-construct)</code>)  *No description*
-* **id** (<code>string</code>)  *No description*
-* **uploaderProperties** (<code>[UploaderProperties](#gradle-s3-uploader-uploaderproperties)</code>)  *No description*
-  * **whitelist** (<code>Array<string></code>)  *No description* 
-  * **distribution** (<code>[GradleDistribution](#gradle-s3-uploader-gradledistribution)</code>)  The {@link GradleDistribution | Gradle distribution} type to download. __*Optional*__
-  * **mailProperties** (<code>[MailProperties](#gradle-s3-uploader-mailproperties)</code>)  Optional properties required for sending messages via mail. __*Optional*__
-  * **schedule** (<code>[aws_events.Schedule](#aws-cdk-lib-aws-events-schedule)</code>)  *No description* __*Optional*__
-  * **slackProperties** (<code>[SlackProperties](#gradle-s3-uploader-slackproperties)</code>)  Optional properties required for sending messages via Slack. __*Optional*__
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#gradle_s3_uploader.GradleUploader.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#gradle_s3_uploader.GradleUploader.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#gradle_s3_uploader.GradleUploader.Initializer.parameter.uploaderProperties">uploaderProperties</a></code> | <code><a href="#gradle_s3_uploader.UploaderProperties">UploaderProperties</a></code> | *No description.* |
 
+---
 
-### Methods
+##### `scope`<sup>Required</sup> <a name="scope" id="gradle_s3_uploader.GradleUploader.Initializer.parameter.scope"></a>
 
+- *Type:* constructs.Construct
 
-#### createBucket(whitelist) <a id="gradle-s3-uploader-gradleuploader-createbucket"></a>
+---
 
+##### `id`<sup>Required</sup> <a name="id" id="gradle_s3_uploader.GradleUploader.Initializer.parameter.id"></a>
 
+- *Type:* string
 
-```ts
-createBucket(whitelist: Array<string>): Bucket
+---
+
+##### `uploaderProperties`<sup>Required</sup> <a name="uploaderProperties" id="gradle_s3_uploader.GradleUploader.Initializer.parameter.uploaderProperties"></a>
+
+- *Type:* <a href="#gradle_s3_uploader.UploaderProperties">UploaderProperties</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#gradle_s3_uploader.GradleUploader.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#gradle_s3_uploader.GradleUploader.createBucket">createBucket</a></code> | *No description.* |
+
+---
+
+##### `toString` <a name="toString" id="gradle_s3_uploader.GradleUploader.toString"></a>
+
+```typescript
+public toString(): string
 ```
 
-* **whitelist** (<code>Array<string></code>)  *No description*
+Returns a string representation of this construct.
 
-__Returns__:
-* <code>[aws_s3.Bucket](#aws-cdk-lib-aws-s3-bucket)</code>
+##### `createBucket` <a name="createBucket" id="gradle_s3_uploader.GradleUploader.createBucket"></a>
+
+```typescript
+public createBucket(whitelist: string[]): Bucket
+```
+
+###### `whitelist`<sup>Required</sup> <a name="whitelist" id="gradle_s3_uploader.GradleUploader.createBucket.parameter.whitelist"></a>
+
+- *Type:* string[]
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#gradle_s3_uploader.GradleUploader.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="gradle_s3_uploader.GradleUploader.isConstruct"></a>
+
+```typescript
+import { GradleUploader } from 'gradle_s3_uploader'
+
+GradleUploader.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="gradle_s3_uploader.GradleUploader.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#gradle_s3_uploader.GradleUploader.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="gradle_s3_uploader.GradleUploader.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
 
 
+## Structs <a name="Structs" id="Structs"></a>
 
-## struct MailProperties  <a id="gradle-s3-uploader-mailproperties"></a>
-
+### MailProperties <a name="MailProperties" id="gradle_s3_uploader.MailProperties"></a>
 
 Properties related to forwarding messages via mail.
 
+#### Initializer <a name="Initializer" id="gradle_s3_uploader.MailProperties.Initializer"></a>
 
+```typescript
+import { MailProperties } from 'gradle_s3_uploader'
 
-Name | Type | Description 
------|------|-------------
-**subscribers** | <code>Array<string></code> | <span></span>
+const mailProperties: MailProperties = { ... }
+```
 
+#### Properties <a name="Properties" id="Properties"></a>
 
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#gradle_s3_uploader.MailProperties.property.subscribers">subscribers</a></code> | <code>string[]</code> | *No description.* |
 
-## struct SlackProperties  <a id="gradle-s3-uploader-slackproperties"></a>
+---
 
+##### `subscribers`<sup>Required</sup> <a name="subscribers" id="gradle_s3_uploader.MailProperties.property.subscribers"></a>
+
+```typescript
+public readonly subscribers: string[];
+```
+
+- *Type:* string[]
+
+---
+
+### SlackProperties <a name="SlackProperties" id="gradle_s3_uploader.SlackProperties"></a>
 
 Properties related to forwarding messages to Slack.
 
+#### Initializer <a name="Initializer" id="gradle_s3_uploader.SlackProperties.Initializer"></a>
+
+```typescript
+import { SlackProperties } from 'gradle_s3_uploader'
+
+const slackProperties: SlackProperties = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#gradle_s3_uploader.SlackProperties.property.webhook">webhook</a></code> | <code>string</code> | The Slack webhook used to send messages. |
+
+---
+
+##### `webhook`<sup>Required</sup> <a name="webhook" id="gradle_s3_uploader.SlackProperties.property.webhook"></a>
+
+```typescript
+public readonly webhook: string;
+```
+
+- *Type:* string
+
+The Slack webhook used to send messages.
+
+Details on setting up a webhook can be found at https://api.slack.com/messaging/webhooks.
+
+---
+
+### UploaderProperties <a name="UploaderProperties" id="gradle_s3_uploader.UploaderProperties"></a>
+
+#### Initializer <a name="Initializer" id="gradle_s3_uploader.UploaderProperties.Initializer"></a>
+
+```typescript
+import { UploaderProperties } from 'gradle_s3_uploader'
+
+const uploaderProperties: UploaderProperties = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#gradle_s3_uploader.UploaderProperties.property.whitelist">whitelist</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#gradle_s3_uploader.UploaderProperties.property.distribution">distribution</a></code> | <code><a href="#gradle_s3_uploader.GradleDistribution">GradleDistribution</a></code> | The {@link GradleDistribution \| Gradle distribution} type to download. |
+| <code><a href="#gradle_s3_uploader.UploaderProperties.property.mailProperties">mailProperties</a></code> | <code><a href="#gradle_s3_uploader.MailProperties">MailProperties</a></code> | Optional properties required for sending messages via mail. |
+| <code><a href="#gradle_s3_uploader.UploaderProperties.property.schedule">schedule</a></code> | <code>aws-cdk-lib.aws_events.Schedule</code> | *No description.* |
+| <code><a href="#gradle_s3_uploader.UploaderProperties.property.slackProperties">slackProperties</a></code> | <code><a href="#gradle_s3_uploader.SlackProperties">SlackProperties</a></code> | Optional properties required for sending messages via Slack. |
+
+---
+
+##### `whitelist`<sup>Required</sup> <a name="whitelist" id="gradle_s3_uploader.UploaderProperties.property.whitelist"></a>
+
+```typescript
+public readonly whitelist: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="gradle_s3_uploader.UploaderProperties.property.distribution"></a>
+
+```typescript
+public readonly distribution: GradleDistribution;
+```
+
+- *Type:* <a href="#gradle_s3_uploader.GradleDistribution">GradleDistribution</a>
+
+The {@link GradleDistribution | Gradle distribution} type to download.
+
+If no value is specified, only the binaries will be downloaded.
+
+---
+
+##### `mailProperties`<sup>Optional</sup> <a name="mailProperties" id="gradle_s3_uploader.UploaderProperties.property.mailProperties"></a>
+
+```typescript
+public readonly mailProperties: MailProperties;
+```
+
+- *Type:* <a href="#gradle_s3_uploader.MailProperties">MailProperties</a>
+
+Optional properties required for sending messages via mail.
+
+---
+
+##### `schedule`<sup>Optional</sup> <a name="schedule" id="gradle_s3_uploader.UploaderProperties.property.schedule"></a>
+
+```typescript
+public readonly schedule: Schedule;
+```
+
+- *Type:* aws-cdk-lib.aws_events.Schedule
+
+---
+
+##### `slackProperties`<sup>Optional</sup> <a name="slackProperties" id="gradle_s3_uploader.UploaderProperties.property.slackProperties"></a>
+
+```typescript
+public readonly slackProperties: SlackProperties;
+```
+
+- *Type:* <a href="#gradle_s3_uploader.SlackProperties">SlackProperties</a>
+
+Optional properties required for sending messages via Slack.
+
+---
 
 
-Name | Type | Description 
------|------|-------------
-**webhook**🔹 | <code>string</code> | The Slack webhook used to send messages.
 
+## Enums <a name="Enums" id="Enums"></a>
 
-
-## struct UploaderProperties  <a id="gradle-s3-uploader-uploaderproperties"></a>
-
-
-
-
-
-
-Name | Type | Description 
------|------|-------------
-**whitelist** | <code>Array<string></code> | <span></span>
-**distribution**? | <code>[GradleDistribution](#gradle-s3-uploader-gradledistribution)</code> | The {@link GradleDistribution | Gradle distribution} type to download.<br/>__*Optional*__
-**mailProperties**? | <code>[MailProperties](#gradle-s3-uploader-mailproperties)</code> | Optional properties required for sending messages via mail.<br/>__*Optional*__
-**schedule**? | <code>[aws_events.Schedule](#aws-cdk-lib-aws-events-schedule)</code> | __*Optional*__
-**slackProperties**? | <code>[SlackProperties](#gradle-s3-uploader-slackproperties)</code> | Optional properties required for sending messages via Slack.<br/>__*Optional*__
-
-
-
-## enum GradleDistribution  <a id="gradle-s3-uploader-gradledistribution"></a>
+### GradleDistribution <a name="GradleDistribution" id="gradle_s3_uploader.GradleDistribution"></a>
 
 Types of available Gradle distributions.
 
-Name | Description
------|-----
-**BIN** |Binaries only.
-**ALL** |Binaries, sources and documentation.
-**BOTH** |BINARY and ALL.
+#### Members <a name="Members" id="Members"></a>
 
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#gradle_s3_uploader.GradleDistribution.BIN">BIN</a></code> | Binaries only. |
+| <code><a href="#gradle_s3_uploader.GradleDistribution.ALL">ALL</a></code> | Binaries, sources and documentation. |
+| <code><a href="#gradle_s3_uploader.GradleDistribution.BOTH">BOTH</a></code> | BINARY and ALL. |
+
+---
+
+##### `BIN` <a name="BIN" id="gradle_s3_uploader.GradleDistribution.BIN"></a>
+
+Binaries only.
+
+---
+
+
+##### `ALL` <a name="ALL" id="gradle_s3_uploader.GradleDistribution.ALL"></a>
+
+Binaries, sources and documentation.
+
+---
+
+
+##### `BOTH` <a name="BOTH" id="gradle_s3_uploader.GradleDistribution.BOTH"></a>
+
+BINARY and ALL.
+
+---
 
