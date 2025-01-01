@@ -195,7 +195,7 @@ const uploaderProperties: UploaderProperties = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#gradle_s3_uploader.UploaderProperties.property.whitelist">whitelist</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#gradle_s3_uploader.UploaderProperties.property.distribution">distribution</a></code> | <code><a href="#gradle_s3_uploader.GradleDistribution">GradleDistribution</a></code> | The {@link GradleDistribution \| Gradle distribution} type to download. |
+| <code><a href="#gradle_s3_uploader.UploaderProperties.property.distribution">distribution</a></code> | <code><a href="#gradle_s3_uploader.GradleDistribution">GradleDistribution</a></code> | The {@link GradleDistributionGradle distribution} type to download. |
 | <code><a href="#gradle_s3_uploader.UploaderProperties.property.mailProperties">mailProperties</a></code> | <code><a href="#gradle_s3_uploader.MailProperties">MailProperties</a></code> | Optional properties required for sending messages via mail. |
 | <code><a href="#gradle_s3_uploader.UploaderProperties.property.schedule">schedule</a></code> | <code>aws-cdk-lib.aws_events.Schedule</code> | *No description.* |
 | <code><a href="#gradle_s3_uploader.UploaderProperties.property.slackProperties">slackProperties</a></code> | <code><a href="#gradle_s3_uploader.SlackProperties">SlackProperties</a></code> | Optional properties required for sending messages via Slack. |
@@ -220,7 +220,7 @@ public readonly distribution: GradleDistribution;
 
 - *Type:* <a href="#gradle_s3_uploader.GradleDistribution">GradleDistribution</a>
 
-The {@link GradleDistribution | Gradle distribution} type to download.
+The {@link GradleDistributionGradle distribution} type to download.
 
 If no value is specified, only the binaries will be downloaded.
 
