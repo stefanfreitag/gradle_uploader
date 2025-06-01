@@ -23,7 +23,7 @@ import { Construct } from 'constructs';
 /**
  * Properties related to forwarding messages to Slack.
  */
-export interface SlackProperties{
+export interface SlackProperties {
   /** The Slack webhook used to send messages. Details on setting up a webhook can be found at https://api.slack.com/messaging/webhooks.
    *  @experimental
   */
@@ -41,7 +41,7 @@ export interface MailProperties {
 /**
  * Types of available Gradle distributions.
  */
-export enum GradleDistribution{
+export enum GradleDistribution {
   /**
    * Binaries only.
    */
@@ -53,7 +53,7 @@ export enum GradleDistribution{
   /**
    * BINARY and ALL.
    */
-  BOTH
+  BOTH,
 }
 
 export interface UploaderProperties {
