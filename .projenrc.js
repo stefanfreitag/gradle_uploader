@@ -8,7 +8,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: 'gradle_s3_uploader',
   description: 'Uploads new Gradle versions to an S3 bucket',
   repository: 'https://github.com/stefanfreitag/gradle_uploader.git',
-  cdkVersion: '2.160.0',
+  cdkVersion: '2.233.0',
+  constructsVersion: '10.4.4',
   codeCov: true,
   defaultReleaseBranch: 'master',
   depsUpgradeOptions: {
@@ -39,7 +40,19 @@ const project = new awscdk.AwsCdkConstructLibrary({
     mavenArtifactId: 'cdkGradleUploader',
   },
 
-  typescriptVersion: '^4.3.5',
+  typescriptVersion: '~5.9.0',
+  jsiiVersion: '~5.9.0',
+  jestVersion: '^29',
+
+  // Override specific test dependencies for TypeScript 5.x compatibility
+  deps: [],
+  devDeps: [
+    '@types/jest@^29',
+    'ts-jest@^29',
+  ],
+
+  minNodeVersion: '22.0.0', // Match your current Node.js version
+  projenVersion: '0.98.32', // Use latest projen version
 });
 
 const common_exclude = ['.history/', '__pycache__/', 'layer-code/python/'];

@@ -1,23 +1,23 @@
 import * as path from 'path';
+import { CfnOutput, Duration, RemovalPolicy } from 'aws-cdk-lib';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import {
   Function,
   Runtime,
   LayerVersion,
   Code,
-} from 'aws-cdk-lib//aws-lambda';
-import { RetentionDays } from 'aws-cdk-lib//aws-logs';
-import { Topic } from 'aws-cdk-lib//aws-sns';
-import { EmailSubscription } from 'aws-cdk-lib//aws-sns-subscriptions';
-import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
-import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
-import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+} from 'aws-cdk-lib/aws-lambda';
+import { RetentionDays, LogGroup } from 'aws-cdk-lib/aws-logs';
 import {
   Bucket,
   BlockPublicAccess,
   BucketEncryption,
   BucketPolicy,
 } from 'aws-cdk-lib/aws-s3';
-import { CfnOutput, Duration, RemovalPolicy } from 'aws-cdk-lib/core';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { Construct } from 'constructs';
 
 /**
@@ -125,15 +125,20 @@ export class GradleUploader extends Construct {
   }
 
   private createFunction(layer: LayerVersion, bucket: Bucket, topic: Topic) {
+    const logGroup = new LogGroup(this, 'GradleUploaderLogGroup', {
+      logGroupName: '/aws/lambda/gradle-uploader',
+      retention: RetentionDays.ONE_WEEK,
+      removalPolicy: RemovalPolicy.DESTROY,
+    });
 
     return new Function(this, 'fnUpload', {
-      runtime: Runtime.PYTHON_3_8,
+      runtime: Runtime.PYTHON_3_12,
       description: 'Download Gradle distribution to S3 bucket',
       code: Code.fromAsset(path.join(__dirname, '../lambda')),
       handler: 'gradle_uploader.main',
       timeout: Duration.minutes(5),
       memorySize: 512,
-      logRetention: RetentionDays.ONE_WEEK,
+      logGroup: logGroup,
       layers: [layer],
       environment: {
         BUCKET_NAME: bucket.bucketName,
@@ -145,7 +150,7 @@ export class GradleUploader extends Construct {
   private createLambdaLayer(): LayerVersion {
     return new LayerVersion(this, 'GradleUploaderLayer', {
       code: Code.fromAsset(path.join(__dirname, '../layer-code')),
-      compatibleRuntimes: [Runtime.PYTHON_3_8],
+      compatibleRuntimes: [Runtime.PYTHON_3_12],
       license: 'Apache-2.0',
       description: 'A layer containing dependencies for the Gradle Uploader',
     });

@@ -72,7 +72,7 @@ test('Lambda function is setup ', () => {
   const template = Template.fromStack(stack);
 
   template.hasResourceProperties('AWS::Lambda::Function', {
-    Runtime: 'python3.8',
+    Runtime: 'python3.12',
   },
   );
 });
