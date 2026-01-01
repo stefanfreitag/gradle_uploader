@@ -51,7 +51,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'ts-jest@^29',
   ],
 
-  minNodeVersion: '22.0.0', // Match your current Node.js version
+  minNodeVersion: '24.0.0', // Match your current Node.js version
   projenVersion: '0.98.32', // Use latest projen version
 
   // Enable NPM trusted publishing via OIDC
