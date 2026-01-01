@@ -33,6 +33,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   publishToPypi: {
     distName: 'cdk-gradle-uploader',
     module: 'cdk_gradle_uploader',
+    trustedPublishing: true,
+
   },
   publishToMaven: {
     javaPackage: 'io.github.stefanfreitag.cdk.gradleuploader',
