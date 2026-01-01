@@ -53,6 +53,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
   minNodeVersion: '22.0.0', // Match your current Node.js version
   projenVersion: '0.98.32', // Use latest projen version
+
+  // Enable NPM trusted publishing via OIDC
+  npmTrustedPublishing: true,
 });
 
 const common_exclude = ['.history/', '__pycache__/', 'layer-code/python/'];
