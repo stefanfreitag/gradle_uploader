@@ -41,7 +41,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
     mavenGroupId: 'io.github.stefanfreitag',
     mavenArtifactId: 'cdkGradleUploader',
   },
-
   typescriptVersion: '~5.9.0',
   jsiiVersion: '~5.9.0',
   jestVersion: '^29',
@@ -53,7 +52,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'ts-jest@^29',
   ],
 
-  minNodeVersion: '24.0.0', // Match your current Node.js version
+  minNodeVersion: '24.14.0', // Match your current Node.js version
   projenVersion: '0.99.17', // Use latest projen version
 
   // Enable NPM trusted publishing via OIDC
