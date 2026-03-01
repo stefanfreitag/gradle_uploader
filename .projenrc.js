@@ -8,8 +8,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: 'gradle_s3_uploader',
   description: 'Uploads new Gradle versions to an S3 bucket',
   repository: 'https://github.com/stefanfreitag/gradle_uploader.git',
-  cdkVersion: '2.233.0',
-  constructsVersion: '10.4.4',
+  cdkVersion: '2.240.0',
+  constructsVersion: '10.5.1',
   codeCov: true,
   defaultReleaseBranch: 'master',
   depsUpgradeOptions: {
@@ -54,7 +54,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   ],
 
   minNodeVersion: '24.0.0', // Match your current Node.js version
-  projenVersion: '0.98.32', // Use latest projen version
+  projenVersion: '0.99.17', // Use latest projen version
 
   // Enable NPM trusted publishing via OIDC
   npmTrustedPublishing: true,
